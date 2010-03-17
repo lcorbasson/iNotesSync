@@ -13,7 +13,6 @@ using Google.GData.Client;
 using Google.GData.Extensions;
 using Google.GData.Calendar;
 using Google.GData.AccessControl;
-
 using NotesToGoogle;
 
 namespace NotesToGoogle
