@@ -4,6 +4,268 @@
         <name>NotesToGoogleCalApp</name>
     </assembly>
     <members>
+        <member name="T:NotesToGoogle.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:NotesToGoogle.NotesServiceConnect">
+            <summary>
+            The NotesServiceConnect class is used to connect to the Lotus notes web server.  Unsure how many
+            different XML requests can be made, but will look into doing more than just Calendar Displays.
+            </summary>
+        </member>
+        <member name="M:NotesToGoogle.NotesServiceConnect.#ctor(System.String,System.String,System.String,System.Boolean,System.Int32)">
+            <summary>
+            Constructor method for NotesServiceConnect
+            </summary>
+            <param name="_NotesLogin">Username for Lotus notes</param>
+            <param name="_NotesPassword">Password for Lotus Notes</param>
+            <param name="_NotesUrl">URL for iNotes webmail</param>
+            <param name="_ServerAuth">Flag whether to use server auth (or lotus auth)</param>
+            <param name="_DaysAhead">Number of days ahead to check calendar</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesServiceConnect.#ctor(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Constructor method for NotesServiceConnect
+            </summary>
+            <param name="_NotesLogin">Username for Lotus notes</param>
+            <param name="_NotesPassword">Password for Lotus Notes</param>
+            <param name="_NotesUrl">URL for iNotes webmail</param>
+            <param name="_ServerAuth">Flag whether to use server auth (or lotus auth)</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesServiceConnect.#ctor(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Constructor method for NotesServiceConnect
+            </summary>
+            <param name="_NotesLogin">Username for Lotus notes</param>
+            <param name="_NotesPassword">Password for Lotus Notes</param>
+            <param name="_NotesUrl">URL for iNotes webmail</param>
+            <param name="_DaysAhead">Number of Days ahead to search</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesServiceConnect.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Constructor method for NotesServiceConnect
+            </summary>
+            <param name="_NotesLogin">Username for Lotus notes</param>
+            <param name="_NotesPassword">Password for Lotus Notes</param>
+            <param name="_NotesUrl">URL for iNotes webmail</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesServiceConnect.GetNotesXMLCalendar">
+            <summary>
+            Method used to connect to lotus notes and gather the calendar information entries for the configured
+            URL / request path.
+            </summary>
+            <returns>A stream holding the contents of the HttpWebResponse</returns>
+        </member>
+        <member name="M:NotesToGoogle.NotesServiceConnect.TestConnection">
+            <summary>
+            Test the connection to the notes server
+            </summary>
+            <returns>Whether or not the connection is ok</returns>
+        </member>
+        <member name="P:NotesToGoogle.NotesServiceConnect.NotesURL">
+            <summary>
+            Accessor method for sNotesUrl
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.NotesServiceConnect.Login">
+            <summary>
+            Accessor method for sNotesLogin
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.NotesServiceConnect.Password">
+            <summary>
+            Accessor method for sNotesPassword
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.NotesServiceConnect.Auth">
+            <summary>
+            Accessor method for bServerAuth
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.NotesServiceConnect.DaysAhead">
+            <summary>
+            Accessor method for the Days Ahead variable
+            </summary>
+        </member>
+        <member name="T:NotesToGoogle.NotesToGoogleForm">
+            <summary>
+            Public class NotesToGoogleForm creates the main window used for application.
+            It is also an entry point for the appliction.
+            </summary>
+        </member>
+        <member name="F:NotesToGoogle.NotesToGoogleForm.DEFAULTDAYSAHEAD">
+            <summary>
+            Default days ahead value, constant
+            </summary>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.#ctor">
+            <summary>
+             Constructor for NotesToGoogleForm class
+             Creates initializes main window components
+            </summary>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.OnResize(System.EventArgs)">
+            <summary>
+            Override method from parent.OnResize; method will move application to tray
+            </summary>
+            <param name="e">Event args passed to on resize</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.NotesToGoogleForm_Load(System.Object,System.EventArgs)">
+            <summary>
+            Method called when the main form is loaded
+            </summary>
+            <param name="sender">Object taht sent the Load event</param>
+            <param name="e">Event Arguments passed</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.Main">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.radioButton_OtherCalChoice_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Event handler called when the radio button for Other Calendar event is changed.
+            This event will set the Other calendar name text box enabled or not.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.notifyIcon_Tray_MouseDoubleClick(System.Object,System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Event method called when notifyIcon is double clicked
+            </summary>
+            <param name="sender">Sender object</param>
+            <param name="e">MouseEvent arguments passed</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.button_ClearDebug_Click(System.Object,System.EventArgs)">
+            <summary>
+            Event handler used to clear the Debug text box when pressed
+            </summary>
+            <param name="sender">Object that sent the Event</param>
+            <param name="e">Event arguments passed by Event</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.checkBox_CustomDaysAhead_LostFocus(System.Object,System.EventArgs)">
+            <summary>
+            Event handler called when focus is taken off of Custom Days text box
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.checkBox_CustomDaysAhead_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Event handler method called when the user changes the value of Custom Days Ahead Check
+            </summary>
+            <param name="sender">Object sending the request</param>
+            <param name="e">Event Args being passed</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.radioButton_MainCalChoice_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Event handler called when the radio button for Main Calendar Choice is changed.
+            This event will set the Other calendar name text box enabled or not.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.button_SaveSettings_Click(System.Object,System.EventArgs)">
+            <summary>
+            Event handler used when Save button is clicked
+            </summary>
+            <param name="sender">Object that initiated the Event</param>
+            <param name="e">Event arguments passed by Event</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.UpdateSyncProgressBar(System.Int32)">
+            <summary>
+            Private method used to update the Progress bar while syncing.  This should be called by a thread
+            safe delegate in the DoTheWork thread method.
+            </summary>
+            <param name="value">value to increase progress bar</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.PrintXMLtoDebug(System.IO.Stream)">
+            <summary>
+            Method used to display the XML content in the Debug panel.  This should be called by a thread
+            safe delegate in the DoTheWork thread method.
+            </summary>
+            <param name="stream"></param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.PrintStringToDebug(System.String)">
+            <summary>
+            Method used to display error messages in the debug log. This should be called by a thread
+            safe delegate in the DoTheWork thread method.
+            </summary>
+            <param name="message">Message to be added to the debug log</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.button_ManualSync_Click(System.Object,System.EventArgs)">
+            <summary>
+            Method called when Manual Sync buttong has been pushed
+            </summary>
+            <param name="sender">Object creating the event</param>
+            <param name="e">Event arguments</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.DoTheWork_Completed(System.Object,System.ComponentModel.RunWorkerCompletedEventArgs)">
+            <summary>
+            Completed event handler for background workers
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.DoTheWork_Progress(System.Object,System.ComponentModel.ProgressChangedEventArgs)">
+            <summary>
+            Progress Changed event handler for background workers
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.DoTheWork(System.Object,System.ComponentModel.DoWorkEventArgs)">
+            <summary>
+            DoWork method for Background workers, method must not attempt to touch the UI, we use Progress
+            Changed for that.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.#ctor">
+            <summary>
+            Class constructor for SyncPreferences class.
+            This class is used to save and retrieve the user preferences from file.
+            </summary>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.SavePreferences">
+            <summary>
+            Method used to save / write preferences to file
+            </summary>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.LoadPreferences">
+            <summary>
+            Method used to load / read preferences from file
+            </summary>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.SetPreference(System.String,System.String)">
+            <summary>
+            Method used to set preference values
+            </summary>
+            <param name="_prefName">Preference Name to store</param>
+            <param name="_prefValue">Preference Value to store</param>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.GetPreference(System.String)">
+            <summary>
+            Method used to retrieve preference value
+            </summary>
+            <param name="_prefName">Preference name to return value of</param>
+            <returns>String value of preference</returns>
+        </member>
         <member name="T:NotesToGoogle.GoogleServiceConnect">
             <summary>
             The GoogleServiceConnect class is used to make connections to google calendar; it can be used to:
@@ -147,268 +409,6 @@
             <summary>
             Accessor method for Notifications
             </summary>
-        </member>
-        <member name="T:NotesToGoogle.NotesToGoogleForm">
-            <summary>
-            Public class NotesToGoogleForm creates the main window used for application.
-            It is also an entry point for the appliction.
-            </summary>
-        </member>
-        <member name="F:NotesToGoogle.NotesToGoogleForm.DEFAULTDAYSAHEAD">
-            <summary>
-            Default days ahead value, constant
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.#ctor">
-            <summary>
-             Constructor for NotesToGoogleForm class
-             Creates initializes main window components
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.OnResize(System.EventArgs)">
-            <summary>
-            Override method from parent.OnResize; method will move application to tray
-            </summary>
-            <param name="e">Event args passed to on resize</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.NotesToGoogleForm_Load(System.Object,System.EventArgs)">
-            <summary>
-            Method called when the main form is loaded
-            </summary>
-            <param name="sender">Object taht sent the Load event</param>
-            <param name="e">Event Arguments passed</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.Main">
-            <summary>
-            The main entry point for the application.
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.radioButton_OtherCalChoice_CheckedChanged(System.Object,System.EventArgs)">
-            <summary>
-            Event handler called when the radio button for Other Calendar event is changed.
-            This event will set the Other calendar name text box enabled or not.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.notifyIcon_Tray_MouseDoubleClick(System.Object,System.Windows.Forms.MouseEventArgs)">
-            <summary>
-            Event method called when notifyIcon is double clicked
-            </summary>
-            <param name="sender">Sender object</param>
-            <param name="e">MouseEvent arguments passed</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.button_ClearDebug_Click(System.Object,System.EventArgs)">
-            <summary>
-            Event handler used to clear the Debug text box when pressed
-            </summary>
-            <param name="sender">Object that sent the Event</param>
-            <param name="e">Event arguments passed by Event</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.checkBox_CustomDaysAhead_LostFocus(System.Object,System.EventArgs)">
-            <summary>
-            Event handler called when focus is taken off of Custom Days text box
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.checkBox_CustomDaysAhead_CheckedChanged(System.Object,System.EventArgs)">
-            <summary>
-            Event handler method called when the user changes the value of Custom Days Ahead Check
-            </summary>
-            <param name="sender">Object sending the request</param>
-            <param name="e">Event Args being passed</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.radioButton_MainCalChoice_CheckedChanged(System.Object,System.EventArgs)">
-            <summary>
-            Event handler called when the radio button for Main Calendar Choice is changed.
-            This event will set the Other calendar name text box enabled or not.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.button_SaveSettings_Click(System.Object,System.EventArgs)">
-            <summary>
-            Event handler used when Save button is clicked
-            </summary>
-            <param name="sender">Object that initiated the Event</param>
-            <param name="e">Event arguments passed by Event</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.UpdateSyncProgressBar(System.Int32)">
-            <summary>
-            Private method used to update the Progress bar while syncing.  This should be called by a thread
-            safe delegate in the DoTheWork thread method.
-            </summary>
-            <param name="value">value to increase progress bar</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.PrintXMLtoDebug(System.IO.Stream)">
-            <summary>
-            Method used to display the XML content in the Debug panel.  This should be called by a thread
-            safe delegate in the DoTheWork thread method.
-            </summary>
-            <param name="stream"></param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.PrintStringToDebug(System.String)">
-            <summary>
-            Method used to display error messages in the debug log. This should be called by a thread
-            safe delegate in the DoTheWork thread method.
-            </summary>
-            <param name="message">Message to be added to the debug log</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.button_ManualSync_Click(System.Object,System.EventArgs)">
-            <summary>
-            Method called when Manual Sync buttong has been pushed
-            </summary>
-            <param name="sender">Object creating the event</param>
-            <param name="e">Event arguments</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.DoTheWork_Completed(System.Object,System.ComponentModel.RunWorkerCompletedEventArgs)">
-            <summary>
-            Completed event handler for background workers
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.DoTheWork_Progress(System.Object,System.ComponentModel.ProgressChangedEventArgs)">
-            <summary>
-            Progress Changed event handler for background workers
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.DoTheWork(System.Object,System.ComponentModel.DoWorkEventArgs)">
-            <summary>
-            DoWork method for Background workers, method must not attempt to touch the UI, we use Progress
-            Changed for that.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="T:NotesToGoogle.NotesServiceConnect">
-            <summary>
-            The NotesServiceConnect class is used to connect to the Lotus notes web server.  Unsure how many
-            different XML requests can be made, but will look into doing more than just Calendar Displays.
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.NotesServiceConnect.#ctor(System.String,System.String,System.String,System.Boolean,System.Int32)">
-            <summary>
-            Constructor method for NotesServiceConnect
-            </summary>
-            <param name="_NotesLogin">Username for Lotus notes</param>
-            <param name="_NotesPassword">Password for Lotus Notes</param>
-            <param name="_NotesUrl">URL for iNotes webmail</param>
-            <param name="_ServerAuth">Flag whether to use server auth (or lotus auth)</param>
-            <param name="_DaysAhead">Number of days ahead to check calendar</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesServiceConnect.#ctor(System.String,System.String,System.String,System.Boolean)">
-            <summary>
-            Constructor method for NotesServiceConnect
-            </summary>
-            <param name="_NotesLogin">Username for Lotus notes</param>
-            <param name="_NotesPassword">Password for Lotus Notes</param>
-            <param name="_NotesUrl">URL for iNotes webmail</param>
-            <param name="_ServerAuth">Flag whether to use server auth (or lotus auth)</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesServiceConnect.#ctor(System.String,System.String,System.String,System.Int32)">
-            <summary>
-            Constructor method for NotesServiceConnect
-            </summary>
-            <param name="_NotesLogin">Username for Lotus notes</param>
-            <param name="_NotesPassword">Password for Lotus Notes</param>
-            <param name="_NotesUrl">URL for iNotes webmail</param>
-            <param name="_DaysAhead">Number of Days ahead to search</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesServiceConnect.#ctor(System.String,System.String,System.String)">
-            <summary>
-            Constructor method for NotesServiceConnect
-            </summary>
-            <param name="_NotesLogin">Username for Lotus notes</param>
-            <param name="_NotesPassword">Password for Lotus Notes</param>
-            <param name="_NotesUrl">URL for iNotes webmail</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesServiceConnect.GetNotesXMLCalendar">
-            <summary>
-            Method used to connect to lotus notes and gather the calendar information entries for the configured
-            URL / request path.
-            </summary>
-            <returns>A stream holding the contents of the HttpWebResponse</returns>
-        </member>
-        <member name="M:NotesToGoogle.NotesServiceConnect.TestConnection">
-            <summary>
-            Test the connection to the notes server
-            </summary>
-            <returns>Whether or not the connection is ok</returns>
-        </member>
-        <member name="P:NotesToGoogle.NotesServiceConnect.NotesURL">
-            <summary>
-            Accessor method for sNotesUrl
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.NotesServiceConnect.Login">
-            <summary>
-            Accessor method for sNotesLogin
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.NotesServiceConnect.Password">
-            <summary>
-            Accessor method for sNotesPassword
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.NotesServiceConnect.Auth">
-            <summary>
-            Accessor method for bServerAuth
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.NotesServiceConnect.DaysAhead">
-            <summary>
-            Accessor method for the Days Ahead variable
-            </summary>
-        </member>
-        <member name="T:NotesToGoogle.Properties.Resources">
-            <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Properties.Resources.ResourceManager">
-            <summary>
-              Returns the cached ResourceManager instance used by this class.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Properties.Resources.Culture">
-            <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.#ctor">
-            <summary>
-            Class constructor for SyncPreferences class.
-            This class is used to save and retrieve the user preferences from file.
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.SavePreferences">
-            <summary>
-            Method used to save / write preferences to file
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.LoadPreferences">
-            <summary>
-            Method used to load / read preferences from file
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.SetPreference(System.String,System.String)">
-            <summary>
-            Method used to set preference values
-            </summary>
-            <param name="_prefName">Preference Name to store</param>
-            <param name="_prefValue">Preference Value to store</param>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.GetPreference(System.String)">
-            <summary>
-            Method used to retrieve preference value
-            </summary>
-            <param name="_prefName">Preference name to return value of</param>
-            <returns>String value of preference</returns>
         </member>
         <member name="T:NotesToGoogle.NotesToGoogleSync">
             <summary>
