@@ -89,14 +89,14 @@ namespace NotesToGoogle
                 checkBox_ScheduleSync.Checked = (config.GetPreference("ScheduleSync") != "") ? Convert.ToBoolean(config.GetPreference("ScheduleSync")) : false;
             }
             else
-            {
+            {   // If there were errors, we need to post an error
                 PrintStringToDebug("Config Preferences did not load properly");
             }
 
             // Sync on Startup if selected
             if (checkBox_SyncOnStartup.Checked)
-            {
-
+            {   // If the user has checked to Sync on Startup, we simulate the Button click
+                button_ManualSync_Click((object)null, (EventArgs)null);
             }
         }
 
