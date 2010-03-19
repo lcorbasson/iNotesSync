@@ -122,6 +122,11 @@
              Creates initializes main window components
             </summary>
         </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.UpdateUI">
+            <summary>
+            Update method called for changing localization information
+            </summary>
+        </member>
         <member name="M:NotesToGoogle.NotesToGoogleForm.OnResize(System.EventArgs)">
             <summary>
             Override method from parent.OnResize; method will move application to tray
@@ -168,9 +173,9 @@
             The main entry point for the application.
             </summary>
         </member>
-        <member name="F:NotesToGoogle.NotesToGoogleForm.AUTHORNAME">
+        <member name="F:NotesToGoogle.NotesToGoogleForm.newDaysAhead">
             
-             Class variables, not created through GUI editor
+             GUI Developer class variables
             
         </member>
         <member name="M:NotesToGoogle.NotesToGoogleForm.radioButton_OtherCalChoice_CheckedChanged(System.Object,System.EventArgs)">
@@ -217,12 +222,48 @@
             <param name="sender"></param>
             <param name="e"></param>
         </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.textBox_OtherCalName_LostFocus(System.Object,System.EventArgs)">
+            <summary>
+            Event handler for when other cal loses focus, we need to check to see that the calendar has an
+            appropriate name
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.checkBox_ScheduleSync_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Event handler when the schedule sync is changed
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.radioButton_French_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Method used to change the language to French
+            </summary>
+            <param name="sender">Sender of the request</param>
+            <param name="e">Event args passed from sender</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.radioButton_English_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Method used to change the language to English
+            </summary>
+            <param name="sender">Sender of the request</param>
+            <param name="e">Event args passed from sender</param>
+        </member>
         <member name="M:NotesToGoogle.NotesToGoogleForm.button_SaveSettings_Click(System.Object,System.EventArgs)">
             <summary>
             Event handler used when Save button is clicked
             </summary>
             <param name="sender">Object that initiated the Event</param>
             <param name="e">Event arguments passed by Event</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.linkLabel_url_LinkClicked(System.Object,System.Windows.Forms.LinkLabelLinkClickedEventArgs)">
+            <summary>
+            Event handler called when website link is clicked
+            </summary>
+            <param name="sender">Sender of the event</param>
+            <param name="e">Parameters passed</param>
         </member>
         <member name="M:NotesToGoogle.NotesToGoogleForm.UpdateSyncProgressBar(System.Int32)">
             <summary>
@@ -284,161 +325,10 @@
             <param name="sender"></param>
             <param name="e"></param>
         </member>
-        <member name="T:NotesToGoogle.Localization">
-            <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.ResourceManager">
-            <summary>
-              Returns the cached ResourceManager instance used by this class.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.Culture">
-            <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.button_ClearDebug">
-            <summary>
-              Looks up a localized string similar to Clear.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.button_ManualSync">
-            <summary>
-              Looks up a localized string similar to Synchronize.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.button_SaveSettings">
-            <summary>
-              Looks up a localized string similar to Save.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.checkBox_ConnectUsingSSL">
-            <summary>
-              Looks up a localized string similar to Use SSL to connect to Google calendar.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.checkBox_CreateNotification">
-            <summary>
-              Looks up a localized string similar to Create notifications (30 mins).
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.checkBox_CustomDaysAhead">
-            <summary>
-              Looks up a localized string similar to Configure days ahead (default 14).
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.checkBox_MessageBoxDebug">
-            <summary>
-              Looks up a localized string similar to Prompt Messages.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.checkBox_MinimizeToTray">
-            <summary>
-              Looks up a localized string similar to Minimize to tray.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.checkBox_NotesServerAuth">
-            <summary>
-              Looks up a localized string similar to User Server Authentication.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.checkBox_ScheduleSync">
-            <summary>
-              Looks up a localized string similar to Schedule Sync.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.checkBox_StartMinimized">
-            <summary>
-              Looks up a localized string similar to Start minimized.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.checkBox_SyncOnStartup">
-            <summary>
-              Looks up a localized string similar to Sync on startup.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.label_About">
-            <summary>
-              Looks up a localized string similar to About:.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.label_Author">
-            <summary>
-              Looks up a localized string similar to Author:.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.label_Date">
-            <summary>
-              Looks up a localized string similar to Date:.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.label_GoogleLogin">
-            <summary>
-              Looks up a localized string similar to Username (email):.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.label_GooglePassword">
-            <summary>
-              Looks up a localized string similar to Password:.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.label_NotesLogin">
-            <summary>
-              Looks up a localized string similar to Login:.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.label_NotesPassword">
-            <summary>
-              Looks up a localized string similar to Password:.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.label_NotesWebmail">
-            <summary>
-              Looks up a localized string similar to Webmail URL:.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.label_Status">
-            <summary>
-              Looks up a localized string similar to Sync Status.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.label_Version">
-            <summary>
-              Looks up a localized string similar to Version:.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.radioButton_MainCalChoice">
-            <summary>
-              Looks up a localized string similar to Main Calendar.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.radioButton_OtherCalChoice">
-            <summary>
-              Looks up a localized string similar to Other Calendar.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.tabPage_Connect">
-            <summary>
-              Looks up a localized string similar to Connection.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.tabPage_Debug">
-            <summary>
-              Looks up a localized string similar to Debug.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.tabPage_Preferences">
-            <summary>
-              Looks up a localized string similar to Preferences.
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.Localization.tabPage_Scheduling">
-            <summary>
-              Looks up a localized string similar to Scheduling.
-            </summary>
+        <member name="F:NotesToGoogle.NotesToGoogleForm.m_ResourceManager">
+            
+             Setup user variables for language localization
+            
         </member>
         <member name="M:NotesToGoogle.SyncPreferences.#ctor">
             <summary>

@@ -71,10 +71,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GoogleServiceConnect.cs" />
-    <Compile Include="Localization.Designer.cs">
+    <Compile Include="Localization.en-CA.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Localization.resx</DependentUpon>
+      <DependentUpon>Localization.en-CA.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Localization.fr-FR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Localization.fr-FR.resx</DependentUpon>
     </Compile>
     <Compile Include="NotesServiceConnect.cs" />
     <Compile Include="NotesToGoogleApp.cs">
@@ -82,9 +87,13 @@
     </Compile>
     <Compile Include="NotesToGoogleSync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Localization.resx">
+    <EmbeddedResource Include="Localization.en-CA.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Localization.Designer.cs</LastGenOutput>
+      <LastGenOutput>Localization.en-CA.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Localization.fr-FR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.fr-FR.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="NotesToGoogleApp.resx">
       <DependentUpon>NotesToGoogleApp.cs</DependentUpon>
