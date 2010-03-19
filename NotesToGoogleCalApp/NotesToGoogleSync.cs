@@ -50,10 +50,11 @@ namespace NotesToGoogle
         /// Method called to initiate the sync process.
         /// </summary>
         /// <returns>Returns the success value</returns>
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()] 
         public int Sync(BackgroundWorker worker, DoWorkEventArgs e)
         {
             int retVal = 0;
-            Stream xmlStream;
+            StreamReader xmlStream;
             List<EventEntry> newEvents = new List<EventEntry>();
             int listCount, intval, progressCount;
 
@@ -70,18 +71,19 @@ namespace NotesToGoogle
             else // Services should be good, do work.
             {
                 // Remove old notes entries from the calendar
-                if (scGoogleService.ClearEventEntriesBySearch("Created from [LNotes]") <= 0)
+                if (scGoogleService.ClearEventEntriesBySearch("Created from [LNotes]") < 0)
                 {   // There was an error clearing calendar
                     if (worker != null) { throw new Exception("Error deleting current Notes Entries."); }
                     return SYNCFAILCLEAR;
                 }
 
-                if (worker != null) { worker.ReportProgress(20); }
+                if (worker != null) { worker.ReportProgress(20); }          // Update progress bar; if backgorund process exists
 
                 // Get the XML stream
                 xmlStream = scNotesService.GetNotesXMLCalendar();
+                if (xmlStream == null) { throw new Exception("The connection to Notes timed out."); }
 
-                if (worker != null) { worker.ReportProgress(25); }
+                if (worker != null) { worker.ReportProgress(25); }          // Update progress bar; if background process exists
 
                 // Parse the XML into a List of EventEntries
                 newEvents = ConvertXMLtoEvents(xmlStream);
@@ -105,6 +107,9 @@ namespace NotesToGoogle
                     }
                 }
             }
+
+            xmlStream.Close();
+            scNotesService.CloseConnection();
 
             return retVal;
         }
@@ -144,7 +149,7 @@ namespace NotesToGoogle
         /// </summary>
         /// <param name="_stream">XML stream passed in to create XMLTextReader</param>
         /// <returns>List of EventEntry objects</returns>
-        private List<EventEntry> ConvertXMLtoEvents(Stream _stream)
+        private List<EventEntry> ConvertXMLtoEvents(StreamReader _stream)
         {
             List<EventEntry> events = new List<EventEntry>();   // List of events to return
             XmlTextReader xmlReader = new XmlTextReader(_stream);   // XMLTextReader from passed stream
@@ -257,6 +262,7 @@ namespace NotesToGoogle
 
             } // </viewEntry>
 
+            xmlReader.Close();
             return events;
         }
 

@@ -98,15 +98,23 @@ namespace NotesToGoogle
         }
 
         /// <summary>
+        /// Method used to release the connection
+        /// </summary>
+        public void CloseConnection()
+        {
+            resStream.Close();
+            xmlResponse.Close();
+            xmlRequest.Abort();
+        }
+
+        /// <summary>
         /// Method used to connect to lotus notes and gather the calendar information entries for the configured
         /// URL / request path.
         /// </summary>
         /// <returns>A stream holding the contents of the HttpWebResponse</returns>
-        public Stream GetNotesXMLCalendar()
+        public StreamReader GetNotesXMLCalendar()
         {
-            HttpWebResponse xmlResponse;
-            String iNotesUrl;
-            Stream resStream = null;
+            String iNotesUrl;           
 
             DateTime startDateTime = DateTime.Now;
             DateTime endDateTime = startDateTime.AddDays(iDaysAhead);
@@ -114,24 +122,27 @@ namespace NotesToGoogle
             String startString = startDateTime.ToString("yyyyMMddT000000");
             String endString = endDateTime.ToString("yyyyMMddT235959");
 
+            // Setup/Build the Lotus Notes request URL
+            iNotesUrl = sNotesUrl + "/($calendar)?ReadViewEntries&KeyType=time&StartKey=" + startString + "&UntilKey=" + endString;
+            xmlRequest = (HttpWebRequest)WebRequest.Create(iNotesUrl);
+            xmlRequest.Credentials = ncLotusCred;
+            xmlRequest.KeepAlive = false;
+            xmlRequest.Timeout = 10000;
+
             try
-            {
-                // Setup/Build the Lotus Notes request URL
-                iNotesUrl = sNotesUrl + "/($calendar)?ReadViewEntries&KeyType=time&StartKey=" + startString + "&UntilKey=" + endString;                               
-
-                // Create/Setup the HttpWebRequest
-                HttpWebRequest xmlRequest = (HttpWebRequest)WebRequest.Create(iNotesUrl);
-                xmlRequest.Credentials = ncLotusCred;
-
+            {               
                 // Call the request
                 xmlResponse = (HttpWebResponse)xmlRequest.GetResponse();
 
                 // Work with response/Return data
-                resStream = xmlResponse.GetResponseStream();
+                resStream = new StreamReader(xmlResponse.GetResponseStream());
             }
             catch (WebException e)
             {
-                return (Stream)null;
+                MessageBox.Show(e.Message, "error", MessageBoxButtons.OK);                
+                resStream.Close();
+                xmlResponse.Close();
+                return (StreamReader)null;
             }
 
             return resStream;
@@ -143,19 +154,24 @@ namespace NotesToGoogle
         /// <returns>Whether or not the connection is ok</returns>
         public Boolean TestConnection()
         {
-            HttpWebResponse xmlResponse;
+            HttpWebResponse _webResponse;
             String iNotesUrl;
 
             try
             {
                 // Setup/Build the Lotus Notes request URL
                 iNotesUrl = sNotesUrl + "/($calendar)?ReadViewEntries";
-                HttpWebRequest xmlRequest = (HttpWebRequest)WebRequest.Create(iNotesUrl);
-                xmlRequest.Credentials = ncLotusCred;
-                xmlResponse = (HttpWebResponse)xmlRequest.GetResponse();
+                HttpWebRequest _webRequest = (HttpWebRequest)WebRequest.Create(iNotesUrl);
+                _webRequest.Credentials = ncLotusCred;
+                _webResponse = (HttpWebResponse)_webRequest.GetResponse();
+
+                // Close the connections
+                _webResponse.Close();
+                _webRequest.Abort();
             }
             catch (Exception e)
             {
+                MessageBox.Show(e.Message, "error", MessageBoxButtons.OK);
                 return false;
             }
             return true;
@@ -241,5 +257,8 @@ namespace NotesToGoogle
         private NetworkCredential ncLotusCred;
         private Boolean bServerAuth;
         private int iDaysAhead;
+        private HttpWebResponse xmlResponse;
+        private HttpWebRequest xmlRequest;
+        StreamReader resStream;
     }
 }
