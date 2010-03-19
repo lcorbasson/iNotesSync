@@ -62,6 +62,11 @@
             <param name="_NotesPassword">Password for Lotus Notes</param>
             <param name="_NotesUrl">URL for iNotes webmail</param>
         </member>
+        <member name="M:NotesToGoogle.NotesServiceConnect.CloseConnection">
+            <summary>
+            Method used to release the connection
+            </summary>
+        </member>
         <member name="M:NotesToGoogle.NotesServiceConnect.GetNotesXMLCalendar">
             <summary>
             Method used to connect to lotus notes and gather the calendar information entries for the configured
@@ -130,10 +135,43 @@
             <param name="sender">Object taht sent the Load event</param>
             <param name="e">Event Arguments passed</param>
         </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.FormClosingEventCancel_Closing(System.Object,System.ComponentModel.CancelEventArgs)">
+            <summary>
+            Override event for when the Form is closing; if a background worker is syncing, we want to warn
+            the users not to close.
+            </summary>
+            <param name="sender">Object that fired the event</param>
+            <param name="e">Parameters for the cancel event</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.Dispose(System.Boolean)">
+            <summary>
+            Override method for disposing the Form Components
+            </summary>
+            <param name="disposing">Flag of weather disposing</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.PrintXMLtoDebug(System.IO.Stream)">
+            <summary>
+            Method used to display the XML content in the Debug panel.  This should be called by a thread
+            safe delegate in the DoTheWork thread method.
+            </summary>
+            <param name="stream"></param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.PrintStringToDebug(System.String)">
+            <summary>
+            Method used to display error messages in the debug log. This should be called by a thread
+            safe delegate in the DoTheWork thread method.
+            </summary>
+            <param name="message">Message to be added to the debug log</param>
+        </member>
         <member name="M:NotesToGoogle.NotesToGoogleForm.Main">
             <summary>
             The main entry point for the application.
             </summary>
+        </member>
+        <member name="F:NotesToGoogle.NotesToGoogleForm.AUTHORNAME">
+            
+             Class variables, not created through GUI editor
+            
         </member>
         <member name="M:NotesToGoogle.NotesToGoogleForm.radioButton_OtherCalChoice_CheckedChanged(System.Object,System.EventArgs)">
             <summary>
@@ -157,7 +195,7 @@
             <param name="sender">Object that sent the Event</param>
             <param name="e">Event arguments passed by Event</param>
         </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.checkBox_CustomDaysAhead_LostFocus(System.Object,System.EventArgs)">
+        <member name="M:NotesToGoogle.NotesToGoogleForm.textBox_CustomDaysAhead_LostFocus(System.Object,System.EventArgs)">
             <summary>
             Event handler called when focus is taken off of Custom Days text box
             </summary>
@@ -193,19 +231,29 @@
             </summary>
             <param name="value">value to increase progress bar</param>
         </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.PrintXMLtoDebug(System.IO.Stream)">
+        <member name="M:NotesToGoogle.NotesToGoogleForm.toolStripMenuItem_Close_Click(System.Object,System.EventArgs)">
             <summary>
-            Method used to display the XML content in the Debug panel.  This should be called by a thread
-            safe delegate in the DoTheWork thread method.
+            Event handler called when the TrayMenu option Closed is selected;  this will submit a close
+            request to the Form
             </summary>
-            <param name="stream"></param>
+            <param name="sender">sender of the request</param>
+            <param name="e">events passed through the object</param>
         </member>
-        <member name="M:NotesToGoogle.NotesToGoogleForm.PrintStringToDebug(System.String)">
+        <member name="M:NotesToGoogle.NotesToGoogleForm.toolStripMenuItem_Sync_Click(System.Object,System.EventArgs)">
             <summary>
-            Method used to display error messages in the debug log. This should be called by a thread
-            safe delegate in the DoTheWork thread method.
+            Event handler called when the TrayMenu option Sync is selected; this will call a button_manualsync
+            event.
             </summary>
-            <param name="message">Message to be added to the debug log</param>
+            <param name="sender">sender of the event</param>
+            <param name="e">arguments passed through the object</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.toolStripMenuItem_Open_Click(System.Object,System.EventArgs)">
+            <summary>
+            Event handler called when the TrayMenu option Open is selected; this will call TrayIcon
+            event hanlder.
+            </summary>
+            <param name="sender">sender of the event</param>
+            <param name="e">arguments from the sender</param>
         </member>
         <member name="M:NotesToGoogle.NotesToGoogleForm.button_ManualSync_Click(System.Object,System.EventArgs)">
             <summary>
@@ -235,6 +283,162 @@
             </summary>
             <param name="sender"></param>
             <param name="e"></param>
+        </member>
+        <member name="T:NotesToGoogle.Localization">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.button_ClearDebug">
+            <summary>
+              Looks up a localized string similar to Clear.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.button_ManualSync">
+            <summary>
+              Looks up a localized string similar to Synchronize.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.button_SaveSettings">
+            <summary>
+              Looks up a localized string similar to Save.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.checkBox_ConnectUsingSSL">
+            <summary>
+              Looks up a localized string similar to Use SSL to connect to Google calendar.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.checkBox_CreateNotification">
+            <summary>
+              Looks up a localized string similar to Create notifications (30 mins).
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.checkBox_CustomDaysAhead">
+            <summary>
+              Looks up a localized string similar to Configure days ahead (default 14).
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.checkBox_MessageBoxDebug">
+            <summary>
+              Looks up a localized string similar to Prompt Messages.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.checkBox_MinimizeToTray">
+            <summary>
+              Looks up a localized string similar to Minimize to tray.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.checkBox_NotesServerAuth">
+            <summary>
+              Looks up a localized string similar to User Server Authentication.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.checkBox_ScheduleSync">
+            <summary>
+              Looks up a localized string similar to Schedule Sync.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.checkBox_StartMinimized">
+            <summary>
+              Looks up a localized string similar to Start minimized.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.checkBox_SyncOnStartup">
+            <summary>
+              Looks up a localized string similar to Sync on startup.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.label_About">
+            <summary>
+              Looks up a localized string similar to About:.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.label_Author">
+            <summary>
+              Looks up a localized string similar to Author:.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.label_Date">
+            <summary>
+              Looks up a localized string similar to Date:.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.label_GoogleLogin">
+            <summary>
+              Looks up a localized string similar to Username (email):.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.label_GooglePassword">
+            <summary>
+              Looks up a localized string similar to Password:.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.label_NotesLogin">
+            <summary>
+              Looks up a localized string similar to Login:.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.label_NotesPassword">
+            <summary>
+              Looks up a localized string similar to Password:.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.label_NotesWebmail">
+            <summary>
+              Looks up a localized string similar to Webmail URL:.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.label_Status">
+            <summary>
+              Looks up a localized string similar to Sync Status.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.label_Version">
+            <summary>
+              Looks up a localized string similar to Version:.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.radioButton_MainCalChoice">
+            <summary>
+              Looks up a localized string similar to Main Calendar.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.radioButton_OtherCalChoice">
+            <summary>
+              Looks up a localized string similar to Other Calendar.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.tabPage_Connect">
+            <summary>
+              Looks up a localized string similar to Connection.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.tabPage_Debug">
+            <summary>
+              Looks up a localized string similar to Debug.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.tabPage_Preferences">
+            <summary>
+              Looks up a localized string similar to Preferences.
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.Localization.tabPage_Scheduling">
+            <summary>
+              Looks up a localized string similar to Scheduling.
+            </summary>
         </member>
         <member name="M:NotesToGoogle.SyncPreferences.#ctor">
             <summary>
@@ -434,7 +638,7 @@
             </summary>
             <returns>Returns the success value</returns>
         </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.ConvertXMLtoEvents(System.IO.Stream)">
+        <member name="M:NotesToGoogle.NotesToGoogleSync.ConvertXMLtoEvents(System.IO.StreamReader)">
             <summary>
             Method returns a list of EventEntries to be input into GoogleService
             </summary>

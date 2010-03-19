@@ -71,12 +71,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GoogleServiceConnect.cs" />
+    <Compile Include="Localization.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Localization.resx</DependentUpon>
+    </Compile>
     <Compile Include="NotesServiceConnect.cs" />
     <Compile Include="NotesToGoogleApp.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="NotesToGoogleSync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="NotesToGoogleApp.resx">
       <DependentUpon>NotesToGoogleApp.cs</DependentUpon>
     </EmbeddedResource>

@@ -17,7 +17,6 @@ using NotesToGoogle;
 
 namespace NotesToGoogle
 {
-
     /// <summary>
     /// Public class NotesToGoogleForm creates the main window used for application.
     /// It is also an entry point for the appliction.
@@ -83,6 +82,7 @@ namespace NotesToGoogle
                 checkBox_CreateNotification.Checked = (config.GetPreference("NotificationsOn") != "") ? Convert.ToBoolean(config.GetPreference("NotificationsOn")) : false;
                 textBox_CustomDaysAhead.Text = (config.GetPreference("DaysAhead") != "") ? config.GetPreference("DaysAhead") : "14";
                 textBox_OtherCalName.Text = (config.GetPreference("OtherCalName") != "") ? config.GetPreference("OtherCalName") : "Lotus.Notes";
+                checkBox_StartMinimized.Checked = (config.GetPreference("StartMinimized") != "") ? Convert.ToBoolean(config.GetPreference("StartMinimized")) : false;
 
                 // Save Schedule Variables
                 checkBox_SyncOnStartup.Checked = (config.GetPreference("SyncOnStartup") != "") ? Convert.ToBoolean(config.GetPreference("SyncOnStartup")) : false;
@@ -93,10 +93,102 @@ namespace NotesToGoogle
                 PrintStringToDebug("Config Preferences did not load properly");
             }
 
+            if (checkBox_StartMinimized.Checked)
+            {   // If the start minimized box is checked, throw even minimize.
+                m_previousWindowState = this.WindowState;
+                this.WindowState = FormWindowState.Minimized;
+            }
+
             // Sync on Startup if selected
             if (checkBox_SyncOnStartup.Checked)
             {   // If the user has checked to Sync on Startup, we simulate the Button click
                 button_ManualSync_Click((object)null, (EventArgs)null);
+            }
+        }
+
+        /// <summary>
+        /// Override event for when the Form is closing; if a background worker is syncing, we want to warn
+        /// the users not to close.
+        /// </summary>
+        /// <param name="sender">Object that fired the event</param>
+        /// <param name="e">Parameters for the cancel event</param>
+        private void FormClosingEventCancel_Closing(object sender, CancelEventArgs e)
+        {
+            DialogResult result;
+
+            if (backgroundWorker_SingleSync.IsBusy)
+            {
+                result = MessageBox.Show("There is a sync job currently running; are you sure you'd like to quit?", "Job running", MessageBoxButtons.YesNo);
+
+                if (result == DialogResult.Yes) 
+                {   // Forcably kill the background process and quit
+                    backgroundWorker_SingleSync.Dispose();
+                    e.Cancel = false; 
+                }
+                else 
+                {   // Cancel quit
+                    e.Cancel = true; 
+                }
+            }
+            else
+            {
+                e.Cancel = false;
+            }
+        }
+
+        /// <summary>
+        /// Override method for disposing the Form Components
+        /// </summary>
+        /// <param name="disposing">Flag of weather disposing</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Method used to display the XML content in the Debug panel.  This should be called by a thread
+        /// safe delegate in the DoTheWork thread method.
+        /// </summary>
+        /// <param name="stream"></param>
+        private void PrintXMLtoDebug(Stream stream)
+        {
+            DateTime currentDebug = DateTime.Now;
+
+            this.textBox_Debug.Text += " " + currentDebug.ToString() + "\r\n";
+
+            StreamReader reader2 = new StreamReader(stream, System.Text.Encoding.UTF8);
+            this.textBox_Debug.Text += reader2.ReadToEnd();
+            this.textBox_Debug.Text += "\r\n \r\n";
+
+            this.textBox_Debug.Select(textBox_Debug.Text.Length, 0);
+            this.textBox_Debug.ScrollToCaret();
+        }
+
+        /// <summary>
+        /// Method used to display error messages in the debug log. This should be called by a thread
+        /// safe delegate in the DoTheWork thread method.
+        /// </summary>
+        /// <param name="message">Message to be added to the debug log</param>
+        private void PrintStringToDebug(String message)
+        {
+            DateTime currentDebug = DateTime.Now;
+
+            this.textBox_Debug.Text += " " + currentDebug.ToString() + "\r\n";
+            this.textBox_Debug.Text += message + "\r\n \r\n";
+
+            this.textBox_Debug.Select(textBox_Debug.Text.Length, 0);
+            this.textBox_Debug.ScrollToCaret();
+
+            if (checkBox_MessageBoxDebug.Checked)
+            {
+                MessageBox.Show(message, "Message", MessageBoxButtons.OK);
             }
         }
 
@@ -128,6 +220,7 @@ namespace NotesToGoogle
             this.label_GoogleSection = new System.Windows.Forms.Label();
             this.label_NotesSection = new System.Windows.Forms.Label();
             this.tabPage_Preferences = new System.Windows.Forms.TabPage();
+            this.checkBox_StartMinimized = new System.Windows.Forms.CheckBox();
             this.checkBox_CreateNotification = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox_CustomDaysAhead = new System.Windows.Forms.TextBox();
@@ -167,6 +260,11 @@ namespace NotesToGoogle
             this.pictureBox_Logo = new System.Windows.Forms.PictureBox();
             this.backgroundWorker_SingleSync = new System.ComponentModel.BackgroundWorker();
             this.notifyIcon_Tray = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenu_Tray = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem_Open = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_Sync = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem_Close = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl_MainControl.SuspendLayout();
             this.tabPage_Connect.SuspendLayout();
             this.tabPage_Preferences.SuspendLayout();
@@ -174,6 +272,7 @@ namespace NotesToGoogle
             this.tabPage_Debug.SuspendLayout();
             this.panel_StatusPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Logo)).BeginInit();
+            this.contextMenu_Tray.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl_MainControl
@@ -330,6 +429,7 @@ namespace NotesToGoogle
             // tabPage_Preferences
             // 
             this.tabPage_Preferences.AutoScroll = true;
+            this.tabPage_Preferences.Controls.Add(this.checkBox_StartMinimized);
             this.tabPage_Preferences.Controls.Add(this.checkBox_CreateNotification);
             this.tabPage_Preferences.Controls.Add(this.button1);
             this.tabPage_Preferences.Controls.Add(this.textBox_CustomDaysAhead);
@@ -351,6 +451,16 @@ namespace NotesToGoogle
             this.tabPage_Preferences.TabIndex = 1;
             this.tabPage_Preferences.Text = "Preferences";
             this.tabPage_Preferences.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_StartMinimized
+            // 
+            this.checkBox_StartMinimized.AutoSize = true;
+            this.checkBox_StartMinimized.Location = new System.Drawing.Point(178, 236);
+            this.checkBox_StartMinimized.Name = "checkBox_StartMinimized";
+            this.checkBox_StartMinimized.Size = new System.Drawing.Size(112, 19);
+            this.checkBox_StartMinimized.TabIndex = 13;
+            this.checkBox_StartMinimized.Text = "Start Minimized";
+            this.checkBox_StartMinimized.UseVisualStyleBackColor = true;
             // 
             // checkBox_CreateNotification
             // 
@@ -380,7 +490,7 @@ namespace NotesToGoogle
             this.textBox_CustomDaysAhead.Size = new System.Drawing.Size(60, 21);
             this.textBox_CustomDaysAhead.TabIndex = 10;
             this.textBox_CustomDaysAhead.Text = "14";
-            this.textBox_CustomDaysAhead.LostFocus += new System.EventHandler(this.checkBox_CustomDaysAhead_LostFocus);
+            this.textBox_CustomDaysAhead.LostFocus += new System.EventHandler(this.textBox_CustomDaysAhead_LostFocus);
             // 
             // checkBox_CustomDaysAhead
             // 
@@ -640,9 +750,9 @@ namespace NotesToGoogle
             this.label_AuthorValue.AutoSize = true;
             this.label_AuthorValue.Location = new System.Drawing.Point(403, 9);
             this.label_AuthorValue.Name = "label_AuthorValue";
-            this.label_AuthorValue.Size = new System.Drawing.Size(95, 13);
+            this.label_AuthorValue.Size = new System.Drawing.Size(74, 13);
             this.label_AuthorValue.TabIndex = 4;
-            this.label_AuthorValue.Text = "Kenneth Davidson";
+            this.label_AuthorValue.Text = "Ken Davidson";
             // 
             // label_VersionValue
             // 
@@ -651,16 +761,16 @@ namespace NotesToGoogle
             this.label_VersionValue.Name = "label_VersionValue";
             this.label_VersionValue.Size = new System.Drawing.Size(22, 13);
             this.label_VersionValue.TabIndex = 5;
-            this.label_VersionValue.Text = "0.1";
+            this.label_VersionValue.Text = "1.0";
             // 
             // label_DateValue
             // 
             this.label_DateValue.AutoSize = true;
             this.label_DateValue.Location = new System.Drawing.Point(403, 53);
             this.label_DateValue.Name = "label_DateValue";
-            this.label_DateValue.Size = new System.Drawing.Size(52, 13);
+            this.label_DateValue.Size = new System.Drawing.Size(64, 13);
             this.label_DateValue.TabIndex = 6;
-            this.label_DateValue.Text = "Mar 2010";
+            this.label_DateValue.Text = "March 2010";
             // 
             // label_About
             // 
@@ -680,7 +790,8 @@ namespace NotesToGoogle
             this.textBox_AboutValue.Name = "textBox_AboutValue";
             this.textBox_AboutValue.Size = new System.Drawing.Size(180, 56);
             this.textBox_AboutValue.TabIndex = 9;
-            this.textBox_AboutValue.Text = "Application based on iCalBridge (lngooglecalsync) ported to C#.";
+            this.textBox_AboutValue.Text = "Application used to sync iNotes calendar with Google.  This allows access to Lotu" +
+                "s Notes calendar by iPhone users.";
             // 
             // button_ManualSync
             // 
@@ -747,11 +858,55 @@ namespace NotesToGoogle
             // 
             // notifyIcon_Tray
             // 
-            this.notifyIcon_Tray.BalloonTipText = "Notes to Google Sync";
-            this.notifyIcon_Tray.BalloonTipTitle = "Sync";
+            this.notifyIcon_Tray.BalloonTipText = "iNotes to Google";
+            this.notifyIcon_Tray.BalloonTipTitle = "iNotes to Google";
+            this.notifyIcon_Tray.ContextMenuStrip = this.contextMenu_Tray;
             this.notifyIcon_Tray.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon_Tray.Icon")));
-            this.notifyIcon_Tray.Text = "Notes To Google Sync";
+            this.notifyIcon_Tray.Text = "iNotes to Google";
             this.notifyIcon_Tray.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_Tray_MouseDoubleClick);
+            // 
+            // contextMenu_Tray
+            // 
+            this.contextMenu_Tray.BackColor = System.Drawing.SystemColors.Menu;
+            this.contextMenu_Tray.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.contextMenu_Tray.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_Open,
+            this.toolStripMenuItem_Sync,
+            this.toolStripSeparator1,
+            this.toolStripMenuItem_Close});
+            this.contextMenu_Tray.Name = "contextMenu_Tray";
+            this.contextMenu_Tray.ShowImageMargin = false;
+            this.contextMenu_Tray.Size = new System.Drawing.Size(86, 76);
+            // 
+            // toolStripMenuItem_Open
+            // 
+            this.toolStripMenuItem_Open.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripMenuItem_Open.Name = "toolStripMenuItem_Open";
+            this.toolStripMenuItem_Open.Size = new System.Drawing.Size(85, 22);
+            this.toolStripMenuItem_Open.Text = "Open";
+            this.toolStripMenuItem_Open.Click += new System.EventHandler(this.toolStripMenuItem_Open_Click);
+            // 
+            // toolStripMenuItem_Sync
+            // 
+            this.toolStripMenuItem_Sync.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripMenuItem_Sync.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripMenuItem_Sync.Name = "toolStripMenuItem_Sync";
+            this.toolStripMenuItem_Sync.Size = new System.Drawing.Size(85, 22);
+            this.toolStripMenuItem_Sync.Text = "Sync";
+            this.toolStripMenuItem_Sync.Click += new System.EventHandler(this.toolStripMenuItem_Sync_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(82, 6);
+            // 
+            // toolStripMenuItem_Close
+            // 
+            this.toolStripMenuItem_Close.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripMenuItem_Close.Name = "toolStripMenuItem_Close";
+            this.toolStripMenuItem_Close.Size = new System.Drawing.Size(85, 22);
+            this.toolStripMenuItem_Close.Text = "Close";
+            this.toolStripMenuItem_Close.Click += new System.EventHandler(this.toolStripMenuItem_Close_Click);
             // 
             // NotesToGoogleForm
             // 
@@ -771,12 +926,12 @@ namespace NotesToGoogle
             this.Controls.Add(this.label_Author);
             this.Controls.Add(this.tabControl_MainControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "NotesToGoogleForm";
             this.Text = "Notes To Google Calender Sync";
             this.TransparencyKey = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.Load += new System.EventHandler(this.NotesToGoogleForm_Load);
+            this.Closing += new System.ComponentModel.CancelEventHandler(this.FormClosingEventCancel_Closing);
             this.tabControl_MainControl.ResumeLayout(false);
             this.tabPage_Connect.ResumeLayout(false);
             this.tabPage_Connect.PerformLayout();
@@ -789,11 +944,21 @@ namespace NotesToGoogle
             this.panel_StatusPanel.ResumeLayout(false);
             this.panel_StatusPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Logo)).EndInit();
+            this.contextMenu_Tray.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
+        ///
+        /// Class variables, not created through GUI editor
+        ///
+        private String AUTHORNAME;
+        private String APPVERSION;
+        private String APPDESC;
+        private String APPNAME;
+        private String APPDATE;
+        private int newDaysAhead;
         private TabControl tabControl_MainControl;
         private TabPage tabPage_Connect;
         private PictureBox pictureBox_Logo;
@@ -851,6 +1016,12 @@ namespace NotesToGoogle
         private NotifyIcon notifyIcon_Tray;
         private IContainer components;
         private FormWindowState m_previousWindowState;
+        private ContextMenuStrip contextMenu_Tray;
+        private ToolStripMenuItem toolStripMenuItem_Open;
+        private ToolStripMenuItem toolStripMenuItem_Sync;
+        private ToolStripMenuItem toolStripMenuItem_Close;
+        private ToolStripSeparator toolStripSeparator1;
+        private CheckBox checkBox_StartMinimized;
 
         /// <summary>
         /// Default days ahead value, constant
@@ -895,16 +1066,16 @@ namespace NotesToGoogle
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void checkBox_CustomDaysAhead_LostFocus(object sender, EventArgs e)
+        private void textBox_CustomDaysAhead_LostFocus(object sender, EventArgs e)
         {
             try
             {
-                int newDaysAhead = int.Parse(textBox_CustomDaysAhead.Text);
+                newDaysAhead = int.Parse(textBox_CustomDaysAhead.Text);
             }
             catch (FormatException ex)
             {
                 PrintStringToDebug("Days Ahead: Value is not an appropriate number. \r\n Reverting to old value.");
-                textBox_CustomDaysAhead.Text = config.GetPreference("DaysAhead");                
+                textBox_CustomDaysAhead.Text = (config.GetPreference("DaysAhead") != "") ? config.GetPreference("DaysAhead") : "14";              
             }
         }
 
@@ -966,6 +1137,7 @@ namespace NotesToGoogle
             config.SetPreference("CustomDaysAhead", checkBox_CustomDaysAhead.Checked.ToString());
             config.SetPreference("NotificationsOn", checkBox_CreateNotification.Checked.ToString());
             config.SetPreference("DaysAhead", textBox_CustomDaysAhead.Text);
+            config.SetPreference("StartMinimized", checkBox_StartMinimized.Checked.ToString());
 
             // Save Schedule Variables
             config.SetPreference("SyncOnStartup", checkBox_SyncOnStartup.Checked.ToString());
@@ -989,43 +1161,36 @@ namespace NotesToGoogle
         }
 
         /// <summary>
-        /// Method used to display the XML content in the Debug panel.  This should be called by a thread
-        /// safe delegate in the DoTheWork thread method.
+        /// Event handler called when the TrayMenu option Closed is selected;  this will submit a close
+        /// request to the Form
         /// </summary>
-        /// <param name="stream"></param>
-        private void PrintXMLtoDebug(Stream stream)
+        /// <param name="sender">sender of the request</param>
+        /// <param name="e">events passed through the object</param>
+        private void toolStripMenuItem_Close_Click(object sender, EventArgs e)
         {
-            DateTime currentDebug = DateTime.Now;
-
-            this.textBox_Debug.Text += " " + currentDebug.ToString() + "\r\n";
-
-            StreamReader reader2 = new StreamReader(stream, System.Text.Encoding.UTF8);
-            this.textBox_Debug.Text += reader2.ReadToEnd();
-            this.textBox_Debug.Text += "\r\n \r\n";
-
-            this.textBox_Debug.Select(textBox_Debug.Text.Length, 0);
-            this.textBox_Debug.ScrollToCaret();
+            this.Close();
         }
 
         /// <summary>
-        /// Method used to display error messages in the debug log. This should be called by a thread
-        /// safe delegate in the DoTheWork thread method.
+        /// Event handler called when the TrayMenu option Sync is selected; this will call a button_manualsync
+        /// event.
         /// </summary>
-        /// <param name="message">Message to be added to the debug log</param>
-        private void PrintStringToDebug(String message)
+        /// <param name="sender">sender of the event</param>
+        /// <param name="e">arguments passed through the object</param>
+        private void toolStripMenuItem_Sync_Click(object sender, EventArgs e)
         {
-            DateTime currentDebug = DateTime.Now;
+            button_ManualSync_Click((object)toolStripMenuItem_Sync, e);
+        }
 
-            this.textBox_Debug.Text += " " + currentDebug.ToString() + "\r\n";
-            this.textBox_Debug.Text += message + "\r\n \r\n";
-
-            this.textBox_Debug.Select(textBox_Debug.Text.Length, 0);
-            this.textBox_Debug.ScrollToCaret();
-
-            if (checkBox_MessageBoxDebug.Checked)
-            {
-                MessageBox.Show(message, "Message", MessageBoxButtons.OK);
-            }
+        /// <summary>
+        /// Event handler called when the TrayMenu option Open is selected; this will call TrayIcon
+        /// event hanlder.
+        /// </summary>
+        /// <param name="sender">sender of the event</param>
+        /// <param name="e">arguments from the sender</param>
+        private void toolStripMenuItem_Open_Click(object sender, EventArgs e)
+        {
+            notifyIcon_Tray_MouseDoubleClick((object)toolStripMenuItem_Sync, (MouseEventArgs) null);
         }
 
         /// <summary>
@@ -1041,6 +1206,8 @@ namespace NotesToGoogle
             // Start the background worker.
             backgroundWorker_SingleSync.RunWorkerAsync();
         }
+
+        //////////////////////////// THREAD SECTION ////////////////////////////////////////////////////
 
         /// <summary>
         /// Completed event handler for background workers
@@ -1126,7 +1293,8 @@ namespace NotesToGoogle
                 sync = new NotesToGoogleSync(googleService, notesService);
                 bWorker.ReportProgress(15);
 
-                e.Result = sync.Sync(bWorker, e);             
+                e.Result = sync.Sync(bWorker, e);
+                notesService.CloseConnection();
             }
         }
 
