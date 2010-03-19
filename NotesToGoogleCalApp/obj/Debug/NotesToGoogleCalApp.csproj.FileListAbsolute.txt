@@ -26,6 +26,11 @@ C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToG
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Debug\ResolveAssemblyReference.cache
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Debug\NotesToGoogle.Properties.Resources.resources
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Debug\NotesToGoogleCalApp.csproj.GenerateResource.Cache
-C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Debug\NotesToGoogle.Localization.resources
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\bin\Debug\Resources\NotesToGoogleLogo.jpg
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Debug\NotesToGoogle.NotesToGoogleForm.resources
+C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\bin\Debug\fr-FR\NotesToGoogleCalApp.resources.dll
+C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Debug\NotesToGoogle.Localization.fr-FR.resources
+C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Debug\fr-FR\NotesToGoogleCalApp.resources.dll
+C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\bin\Debug\en-CA\NotesToGoogleCalApp.resources.dll
+C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Debug\NotesToGoogle.Localization.en-CA.resources
+C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Debug\en-CA\NotesToGoogleCalApp.resources.dll
