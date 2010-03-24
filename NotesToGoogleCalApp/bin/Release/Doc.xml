@@ -122,6 +122,19 @@
              Creates initializes main window components
             </summary>
         </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.SetupAndStartScheduleSync">
+            <summary>
+            Method called to setup the ScheduleSync timer with appropriate values; if the user has checked 
+            to start the scheduled sync the system will:
+            - Disable the Manual Sync button and start the timer
+            </summary>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.LoadConfigPreferences">
+            <summary>
+            Method called to load the config preferences into the Form, called AFTER
+            the InitilaizeComponents method.
+            </summary>
+        </member>
         <member name="M:NotesToGoogle.NotesToGoogleForm.UpdateUI">
             <summary>
             Update method called for changing localization information
@@ -265,6 +278,20 @@
             <param name="sender">Sender of the event</param>
             <param name="e">Parameters passed</param>
         </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.textBox_Debug_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Method used to check size and clear if needed the debug screen
+            </summary>
+            <param name="sender">sender of the request</param>
+            <param name="e">event argumetns passed</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.textBox_ScheduleSync_LostFocus(System.Object,System.EventArgs)">
+            <summary>
+            Method called when text box is changed.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
         <member name="M:NotesToGoogle.NotesToGoogleForm.UpdateSyncProgressBar(System.Int32)">
             <summary>
             Private method used to update the Progress bar while syncing.  This should be called by a thread
@@ -302,6 +329,13 @@
             </summary>
             <param name="sender">Object creating the event</param>
             <param name="e">Event arguments</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleForm.Timer_ScheduleSync_Tick(System.Object,System.EventArgs)">
+            <summary>
+            Event method called by the schedule timer.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
         </member>
         <member name="M:NotesToGoogle.NotesToGoogleForm.DoTheWork_Completed(System.Object,System.ComponentModel.RunWorkerCompletedEventArgs)">
             <summary>
