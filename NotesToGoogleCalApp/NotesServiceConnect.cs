@@ -127,7 +127,7 @@ namespace NotesToGoogle
             xmlRequest = (HttpWebRequest)WebRequest.Create(iNotesUrl);
             xmlRequest.Credentials = ncLotusCred;
             xmlRequest.KeepAlive = false;
-            xmlRequest.Timeout = 10000;
+            xmlRequest.Timeout = 20000;
 
             try
             {               

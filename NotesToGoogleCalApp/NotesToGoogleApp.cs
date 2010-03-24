@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Timers;
 using System.Windows.Forms;
 using System.Threading;
 using System.Resources;
@@ -33,15 +34,87 @@ namespace NotesToGoogle
         {
             // Get the config object, contains all properties that have been saved.
             config = new SyncPreferences();
+            
+            // Setup the Timer variable
+
 
             // Setup components
             InitializeComponent();      // Auto-gen GUI
+            LoadConfigPreferences();
+            SetupAndStartScheduleSync();        
 
-            Thread.CurrentThread.CurrentUICulture = m_EnglishCulture;
-            UpdateUI();                 // Personal Components
+            if (checkBox_StartMinimized.Checked)
+            {
+                this.WindowState = FormWindowState.Minimized;
+                this.ShowInTaskbar = false;   
+            }
+        }        
 
-            // Store the current/previous window state
-            m_previousWindowState = (this.WindowState == FormWindowState.Minimized ? FormWindowState.Normal : this.WindowState);
+        /// <summary>
+        /// Method called to setup the ScheduleSync timer with appropriate values; if the user has checked 
+        /// to start the scheduled sync the system will:
+        /// - Disable the Manual Sync button and start the timer
+        /// </summary>
+        private void SetupAndStartScheduleSync()
+        {
+            try
+            {                
+                timer_Schedule.Stop();
+                timer_Schedule.Interval = (Convert.ToInt32(textBox_ScheduleSync.Text) * 60 * 1000);
+                //MessageBox.Show(timer_Schedule.Interval.ToString(), "interval", MessageBoxButtons.OK);
+                //timer_Schedule.Interval = 10000;
+                timer_Schedule.Tick += (Timer_ScheduleSync_Tick);
+
+                if (checkBox_ScheduleSync.Checked)
+                {
+                    timer_Schedule.Start();
+                }
+            }
+            catch (InvalidCastException e)
+            {
+                textBox_ScheduleSync.Text = (config.GetPreference("ScheduleTime") != "") ? config.GetPreference("ScheduleTime") : "30";
+                PrintStringToDebug(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Method called to load the config preferences into the Form, called AFTER
+        /// the InitilaizeComponents method.
+        /// </summary>
+        private void LoadConfigPreferences()
+        {
+            // Load preferences from File
+            if (config.LoadPreferences())
+            {
+                // Update GUI with preference values
+                // Save Connection Variables
+                textBox_WebmailURL.Text = (config.GetPreference("WebmailURL") != "") ? config.GetPreference("WebmailURL") : "http://webmail.domain.com/mail/name.nsf";
+                textBox_NotesLogin.Text = config.GetPreference("NotesLogin");
+                textBox_NotesPassword.Text = config.GetPreference("NotesPassword");
+                textBox_GoogleLogin.Text = config.GetPreference("GoogleLogin");
+                textBox_GooglePassword.Text = config.GetPreference("GooglePassword");
+
+                // Save Preference Variables
+                checkBox_ConnectUsingSSL.Checked = (config.GetPreference("ConnectUsingSSL") != "") ? Convert.ToBoolean(config.GetPreference("ConnectUsingSSL")) : true;
+                checkBox_NotesServerAuth.Checked = (config.GetPreference("NotesServerAuth") != "") ? Convert.ToBoolean(config.GetPreference("NotesServerAuth")) : true;
+                checkBox_MinimizeToTray.Checked = (config.GetPreference("MinimizeToTray") != "") ? Convert.ToBoolean(config.GetPreference("MinimizeToTray")) : false;
+                radioButton_MainCalChoice.Checked = (config.GetPreference("MainCalChoice") != "") ? Convert.ToBoolean(config.GetPreference("MainCalChoice")) : true;
+                radioButton_OtherCalChoice.Checked = (config.GetPreference("OtherCalChoice") != "") ? Convert.ToBoolean(config.GetPreference("OtherCalChoice")) : false;
+                checkBox_CustomDaysAhead.Checked = (config.GetPreference("CustomDaysAhead") != "") ? Convert.ToBoolean(config.GetPreference("CustomDaysAhead")) : false;
+                checkBox_CreateNotification.Checked = (config.GetPreference("NotificationsOn") != "") ? Convert.ToBoolean(config.GetPreference("NotificationsOn")) : false;
+                textBox_CustomDaysAhead.Text = (config.GetPreference("DaysAhead") != "") ? config.GetPreference("DaysAhead") : "14";
+                textBox_OtherCalName.Text = (config.GetPreference("OtherCalName") != "") ? config.GetPreference("OtherCalName") : "Lotus.Notes";
+                checkBox_StartMinimized.Checked = (config.GetPreference("StartMinimized") != "") ? Convert.ToBoolean(config.GetPreference("StartMinimized")) : false;
+
+                // Save Schedule Variables
+                checkBox_SyncOnStartup.Checked = (config.GetPreference("SyncOnStartup") != "") ? Convert.ToBoolean(config.GetPreference("SyncOnStartup")) : false;
+                checkBox_ScheduleSync.Checked = (config.GetPreference("ScheduleSync") != "") ? Convert.ToBoolean(config.GetPreference("ScheduleSync")) : false;
+                textBox_ScheduleSync.Text = (config.GetPreference("ScheduleTime") != "") ? config.GetPreference("ScheduleTime") : "30";
+            }
+            else
+            {   // If there were errors, we need to post an error
+                PrintStringToDebug("Config Preferences did not load properly");
+            }
         }
 
         /// <summary>
@@ -109,13 +182,9 @@ namespace NotesToGoogle
         {   // Call the parent OnResize
             base.OnResize(e);
 
+            //m_previousWindowState = (this.WindowState != FormWindowState.Minimized) ? FormWindowState.Normal : FormWindowState.Minimized;                        
             if (checkBox_MinimizeToTray.Checked)
-            {
-                // We need to keep track of whether you're minimizing from a normal or maximized window
-                if (this.WindowState != FormWindowState.Minimized)
-                {
-                    m_previousWindowState = this.WindowState;
-                }
+            {   // We need to keep track of whether you're minimizing from a normal or maximized window 
                 notifyIcon_Tray.Visible = (this.WindowState == FormWindowState.Minimized);
                 this.Visible = !notifyIcon_Tray.Visible;
             }
@@ -127,8 +196,7 @@ namespace NotesToGoogle
         /// <param name="sender">Object taht sent the Load event</param>
         /// <param name="e">Event Arguments passed</param>
         private void NotesToGoogleForm_Load(object sender, EventArgs e)
-        {
-            // Load preferences from File
+        {   /*
             if (config.LoadPreferences())
             {
                 // Update GUI with preference values
@@ -154,17 +222,16 @@ namespace NotesToGoogle
                 // Save Schedule Variables
                 checkBox_SyncOnStartup.Checked = (config.GetPreference("SyncOnStartup") != "") ? Convert.ToBoolean(config.GetPreference("SyncOnStartup")) : false;
                 checkBox_ScheduleSync.Checked = (config.GetPreference("ScheduleSync") != "") ? Convert.ToBoolean(config.GetPreference("ScheduleSync")) : false;
+                textBox_ScheduleSync.Text = (config.GetPreference("ScheduleTime") != "") ? config.GetPreference("ScheduleTime") : "30";
             }
             else
             {   // If there were errors, we need to post an error
                 PrintStringToDebug("Config Preferences did not load properly");
-            }
+            }*/
 
-            if (checkBox_StartMinimized.Checked)
-            {   // If the start minimized box is checked, throw even minimize.
-                m_previousWindowState = this.WindowState;
-                this.WindowState = FormWindowState.Minimized;
-            }
+            // Setup
+            Thread.CurrentThread.CurrentUICulture = m_EnglishCulture;
+            UpdateUI();                 // Personal Components
 
             // Sync on Startup if selected
             if (checkBox_SyncOnStartup.Checked)
@@ -335,6 +402,8 @@ namespace NotesToGoogle
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_Close = new System.Windows.Forms.ToolStripMenuItem();
             this.linkLabel_url = new System.Windows.Forms.LinkLabel();
+            this.backgroundWorker_Schedule = new System.ComponentModel.BackgroundWorker();
+            this.timer_Schedule = new System.Windows.Forms.Timer(this.components);
             this.tabControl_MainControl.SuspendLayout();
             this.tabPage_Connect.SuspendLayout();
             this.groupBox_GoogleConnection.SuspendLayout();
@@ -648,6 +717,7 @@ namespace NotesToGoogle
             // textBox_CustomDaysAhead
             // 
             this.textBox_CustomDaysAhead.Enabled = false;
+            this.textBox_CustomDaysAhead.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_CustomDaysAhead.Location = new System.Drawing.Point(298, 55);
             this.textBox_CustomDaysAhead.Name = "textBox_CustomDaysAhead";
             this.textBox_CustomDaysAhead.Size = new System.Drawing.Size(60, 21);
@@ -799,6 +869,7 @@ namespace NotesToGoogle
             this.textBox_ScheduleSync.Size = new System.Drawing.Size(31, 21);
             this.textBox_ScheduleSync.TabIndex = 3;
             this.textBox_ScheduleSync.Text = "30";
+            this.textBox_ScheduleSync.LostFocus += new System.EventHandler(this.textBox_ScheduleSync_LostFocus);
             // 
             // tabPage_Debug
             // 
@@ -844,6 +915,7 @@ namespace NotesToGoogle
             this.textBox_Debug.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox_Debug.Size = new System.Drawing.Size(566, 191);
             this.textBox_Debug.TabIndex = 0;
+            this.textBox_Debug.TextChanged += new System.EventHandler(this.textBox_Debug_TextChanged);
             // 
             // label_Author
             // 
@@ -1052,6 +1124,7 @@ namespace NotesToGoogle
             this.Controls.Add(this.label_Author);
             this.Controls.Add(this.tabControl_MainControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "NotesToGoogleForm";
             this.Text = "Notes To Google Calender Sync";
@@ -1140,14 +1213,12 @@ namespace NotesToGoogle
         private BackgroundWorker backgroundWorker_SingleSync;
         private NotifyIcon notifyIcon_Tray;
         private IContainer components;
-        private FormWindowState m_previousWindowState;
         private ContextMenuStrip contextMenu_Tray;
         private ToolStripMenuItem toolStripMenuItem_Open;
         private ToolStripMenuItem toolStripMenuItem_Sync;
         private ToolStripMenuItem toolStripMenuItem_Close;
         private ToolStripSeparator toolStripSeparator1;
         private CheckBox checkBox_StartMinimized;
-        private ResourceManager rm;
         private LinkLabel linkLabel_url;
         private RadioButton radioButton_French;
         private RadioButton radioButton_English;
@@ -1158,6 +1229,8 @@ namespace NotesToGoogle
         private GroupBox groupBox_LotusConnection;
         private GroupBox groupBox_GoogleConnection;
         private GroupBox groupBox_Sync;
+        private BackgroundWorker backgroundWorker_Schedule;
+        private System.Windows.Forms.Timer timer_Schedule;
         
 
         /// <summary>
@@ -1184,8 +1257,8 @@ namespace NotesToGoogle
         private void notifyIcon_Tray_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             this.Visible = true;
+            this.WindowState = FormWindowState.Normal;
             notifyIcon_Tray.Visible = false;
-            this.WindowState = m_previousWindowState;
         }
 
         /// <summary>
@@ -1211,7 +1284,7 @@ namespace NotesToGoogle
             }
             catch (FormatException ex)
             {
-                PrintStringToDebug("Days Ahead: Value is not an appropriate number. \r\n Reverting to old value.");
+                PrintStringToDebug("Days Ahead: Value is not an appropriate number. Reverting to old value.");
                 textBox_CustomDaysAhead.Text = (config.GetPreference("DaysAhead") != "") ? config.GetPreference("DaysAhead") : "14";              
             }
         }
@@ -1259,6 +1332,7 @@ namespace NotesToGoogle
         private void checkBox_ScheduleSync_CheckedChanged(object sender, EventArgs e)
         {
             textBox_ScheduleSync.Enabled = checkBox_ScheduleSync.Checked;
+            //SetupAndStartScheduleSync();
         }
 
         /// <summary>
@@ -1318,6 +1392,7 @@ namespace NotesToGoogle
             // Save Schedule Variables
             config.SetPreference("SyncOnStartup", checkBox_SyncOnStartup.Checked.ToString());
             config.SetPreference("ScheduleSync", checkBox_ScheduleSync.Checked.ToString());
+            config.SetPreference("ScheduleTime", textBox_ScheduleSync.Text);
 
             // Save Config File
             config.SavePreferences();
@@ -1334,6 +1409,38 @@ namespace NotesToGoogle
         private void linkLabel_url_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("iexplore.exe", "https://sourceforge.net/projects/inotessync/");
+        }
+
+        /// <summary>
+        /// Method used to check size and clear if needed the debug screen
+        /// </summary>
+        /// <param name="sender">sender of the request</param>
+        /// <param name="e">event argumetns passed</param>
+        private void textBox_Debug_TextChanged(object sender, EventArgs e)
+        {   // Control the size of the textarea
+            if (textBox_Debug.Text.Length > 5000)
+            {
+                textBox_Debug.Text = "";
+            }
+        }
+
+        /// <summary>
+        /// Method called when text box is changed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void textBox_ScheduleSync_LostFocus(object sender, EventArgs e)
+        {
+            try
+            {
+                int testvalue = int.Parse(textBox_ScheduleSync.Text);
+            }
+            catch (FormatException ex)
+            {
+                PrintStringToDebug("Schedule Time: Value is not an appropriate number. Reverting to last saved value.");
+                textBox_ScheduleSync.Text = (config.GetPreference("ScheduleTime") != "") ? config.GetPreference("ScheduleTime") : "30";
+            }
+            PrintStringToDebug("You must Save and Restart the application to sync with \r\nthe new interval.");
         }
 
         /// <summary>
@@ -1386,11 +1493,33 @@ namespace NotesToGoogle
         /// <param name="e">Event arguments</param>
         private void button_ManualSync_Click(object sender, EventArgs e)
         {
-            // Disable the sync button, so we don't do this twice.
-            button_ManualSync.Enabled = false;
+            if (!backgroundWorker_SingleSync.IsBusy)
+            {   // Check to see if the background worker is already started, this will ensure two syncs are never
+                // done at the same time.
+                // Disable the sync button, so we don't do this twice.
+                button_ManualSync.Enabled = false;
 
-            // Start the background worker.
-            backgroundWorker_SingleSync.RunWorkerAsync();
+                // Start the background worker.
+                backgroundWorker_SingleSync.RunWorkerAsync();
+            }
+        }
+        
+        /// <summary>
+        /// Event method called by the schedule timer.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Timer_ScheduleSync_Tick(Object sender, EventArgs e)
+        {
+            if (!backgroundWorker_SingleSync.IsBusy)
+            {   // Check to see if the background worker is already started, this will ensure two syncs are never
+                // done at the same time.
+                // Disable the sync button, so we don't do this twice.
+                button_ManualSync.Enabled = false;
+
+                // Start the background worker.
+                backgroundWorker_SingleSync.RunWorkerAsync();
+            }
         }
 
         #region Thread_Methods
@@ -1402,13 +1531,13 @@ namespace NotesToGoogle
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void DoTheWork_Completed(object sender, RunWorkerCompletedEventArgs e)
-        {            
+        {
             if (e.Error != null)
             {   // EventArg e contained an error
                 PrintStringToDebug("Error during sync: " + e.Error.Message);
             }
             else
-            {   
+            {
                 // If the Sync completed successfully; no errors within the EventArgs
                 PrintStringToDebug("Sync completed successfully; synced " + e.Result + " calendar entries.");
             }
@@ -1426,7 +1555,9 @@ namespace NotesToGoogle
         private void DoTheWork_Progress(object sender, ProgressChangedEventArgs e)
         {   // Check the progress changed events for ProgressPercentage
             // update the progress bar with the new value
+
             progressBar_SyncProgress.Value = e.ProgressPercentage;
+
         }
 
         /// <summary>
@@ -1486,6 +1617,7 @@ namespace NotesToGoogle
         }
         #endregion
      
+        #region User_Variables
         ///
         /// Setup user variables for language localization
         ///
@@ -1493,6 +1625,8 @@ namespace NotesToGoogle
                                     System.Reflection.Assembly.GetExecutingAssembly());
         private CultureInfo m_EnglishCulture = new CultureInfo("en-CA");
         private CultureInfo m_FrenchCulture = new CultureInfo("fr-FR");
+
+        #endregion
 
         // End of the NotesToGoogleAppClass
     }
