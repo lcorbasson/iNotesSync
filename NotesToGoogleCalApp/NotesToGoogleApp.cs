@@ -1584,6 +1584,7 @@ namespace NotesToGoogle
                  textBox_GoogleLogin.Text, textBox_GooglePassword.Text, 
                  checkBox_ConnectUsingSSL.Checked, checkBox_CreateNotification.Checked);
             googleService.Calendar = defaultCalendar;
+            googleService.DaysAhead = daysAheadToCheck;
 
             bWorker.ReportProgress(5);
 

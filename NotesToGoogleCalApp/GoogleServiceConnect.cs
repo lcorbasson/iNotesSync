@@ -51,6 +51,7 @@ namespace NotesToGoogle
                 defaultCalendar = _GoogleLogin;
                 bUseSSL = _UseSSL;
                 bNotifications = _notifications;
+                iDaysAhead = 14;
 
                 csService = new CalendarService("NotesToGoogleApp");
                 
@@ -150,7 +151,8 @@ namespace NotesToGoogle
         {
             CalendarEntry calToSearch;
             EventQuery query;
-            EventFeed calFeed, batchFeed;           
+            EventFeed calFeed, batchFeed;
+            DateTime today = DateTime.Now;
 
             try
             {
@@ -158,7 +160,9 @@ namespace NotesToGoogle
                 calToSearch = GetCalendarByName(_calendar);
                                 
                 query = new EventQuery(GetAlternateURL(calToSearch));
-                query.Query = _searchText;                
+                query.Query = _searchText;
+                query.StartDate = today;
+                query.EndDate = today.AddDays(iDaysAhead);
                 
                 calFeed = csService.Query(query);
                 foreach (EventEntry ev in calFeed.Entries)
@@ -457,6 +461,22 @@ namespace NotesToGoogle
             }
         }
 
+        /// <summary>
+        /// Accessor method for Days ahead information
+        /// </summary>
+        public int DaysAhead
+        {
+            get
+            {
+                return iDaysAhead;
+            }
+            set
+            {
+                iDaysAhead = value;
+            }
+        }
+
+
         // Class variables
         CalendarService csService;
         private String sHttpProtocol;        
@@ -467,5 +487,6 @@ namespace NotesToGoogle
         private Boolean bNotifications;
         private DateTime dtStartDate, dtEndDate;
         private string defaultCalendar;
+        private int iDaysAhead;
     }
 }
