@@ -124,7 +124,7 @@ namespace NotesToGoogle
         {
             // Setup information section
             label_DateValue.Text = "March 2010";
-            label_VersionValue.Text = "1.0";
+            label_VersionValue.Text = "1.1";
             textBox_AboutValue.Text = "Sync your Lotus Notes calendar to Google.  This allows update to your iPhone and other applications.";
         
             // Fill Top page with culture settings
@@ -188,6 +188,8 @@ namespace NotesToGoogle
                 notifyIcon_Tray.Visible = (this.WindowState == FormWindowState.Minimized);
                 this.Visible = !notifyIcon_Tray.Visible;
             }
+
+            this.ShowInTaskbar = this.Visible;
         }
 
         /// <summary>
