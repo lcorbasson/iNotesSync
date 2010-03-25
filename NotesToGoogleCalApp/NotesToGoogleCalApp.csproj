@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NotesToGoogle</RootNamespace>
-    <AssemblyName>NotesToGoogleCalApp</AssemblyName>
+    <AssemblyName>NotesToGoogleCal</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>NotesToGoogleIcon.ico</ApplicationIcon>

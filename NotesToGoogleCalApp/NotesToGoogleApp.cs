@@ -41,12 +41,17 @@ namespace NotesToGoogle
             // Setup components
             InitializeComponent();      // Auto-gen GUI
             LoadConfigPreferences();
-            SetupAndStartScheduleSync();        
+            SetupAndStartScheduleSync();
 
             if (checkBox_StartMinimized.Checked)
             {
                 this.WindowState = FormWindowState.Minimized;
-                this.ShowInTaskbar = false;   
+                this.ShowInTaskbar = false;
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Normal;
+                this.ShowInTaskbar = true;
             }
         }        
 
@@ -123,8 +128,8 @@ namespace NotesToGoogle
         private void UpdateUI()
         {
             // Setup information section
-            label_DateValue.Text = "March 2010";
-            label_VersionValue.Text = "1.1";
+            label_DateValue.Text = DateTime.Today.ToString();
+            label_VersionValue.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             textBox_AboutValue.Text = "Sync your Lotus Notes calendar to Google.  This allows update to your iPhone and other applications.";
         
             // Fill Top page with culture settings

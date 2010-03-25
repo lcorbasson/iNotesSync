@@ -161,10 +161,11 @@ namespace NotesToGoogle
                                 
                 query = new EventQuery(GetAlternateURL(calToSearch));
                 query.Query = _searchText;
-                query.StartDate = today;
-                query.EndDate = today.AddDays(iDaysAhead);
+                query.StartTime = new DateTime(today.Year, today.Month, today.Day);
+                    today = today.AddDays(iDaysAhead);
+                query.EndTime = new DateTime(today.Year, today.Month, today.Day);
                 
-                calFeed = csService.Query(query);
+                calFeed = csService.Query(query);                
                 foreach (EventEntry ev in calFeed.Entries)
                 {
                     ev.BatchData = new GDataBatchEntryData("D", GDataBatchOperationType.delete); 
@@ -173,7 +174,7 @@ namespace NotesToGoogle
                 batchFeed = (EventFeed)csService.Batch(calFeed, new Uri(calFeed.Batch));
             }
             catch (Exception ex)
-            {                
+            {
                 return -1;
             }          
             return calFeed.Entries.Count;
