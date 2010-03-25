@@ -538,6 +538,11 @@
             Accessor method for Notifications
             </summary>
         </member>
+        <member name="P:NotesToGoogle.GoogleServiceConnect.DaysAhead">
+            <summary>
+            Accessor method for Days ahead information
+            </summary>
+        </member>
         <member name="T:NotesToGoogle.NotesToGoogleSync">
             <summary>
             NotesToGoogleSync class extends the Thread class.  It is run as an extra thread and is responsible
