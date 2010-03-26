@@ -1339,6 +1339,7 @@ namespace NotesToGoogle
         private void checkBox_ScheduleSync_CheckedChanged(object sender, EventArgs e)
         {
             textBox_ScheduleSync.Enabled = checkBox_ScheduleSync.Checked;
+            PrintStringToDebug("Please restart to change Schedule settings.");
             //SetupAndStartScheduleSync();
         }
 

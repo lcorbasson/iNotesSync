@@ -124,6 +124,7 @@ namespace NotesToGoogle
 
             // Setup/Build the Lotus Notes request URL
             iNotesUrl = sNotesUrl + "/($calendar)?ReadViewEntries&KeyType=time&StartKey=" + startString + "&UntilKey=" + endString;
+            //MessageBox.Show(iNotesUrl, "URL", MessageBoxButtons.OK);
             xmlRequest = (HttpWebRequest)WebRequest.Create(iNotesUrl);
             xmlRequest.Credentials = ncLotusCred;
             xmlRequest.KeepAlive = false;
