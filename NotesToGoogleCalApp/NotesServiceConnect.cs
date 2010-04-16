@@ -1,10 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace NotesToGoogle
 {
@@ -29,6 +32,7 @@ namespace NotesToGoogle
             sNotesUrl = _NotesUrl;
             bServerAuth = _ServerAuth;
             iDaysAhead = _DaysAhead;
+            lasterror = "";
 
             if (!bServerAuth)
             {
@@ -50,6 +54,7 @@ namespace NotesToGoogle
             sNotesUrl = _NotesUrl;
             bServerAuth = _ServerAuth;
             iDaysAhead = 14;
+            lasterror = "";
 
             if (!bServerAuth)
             {
@@ -114,7 +119,11 @@ namespace NotesToGoogle
         /// <returns>A stream holding the contents of the HttpWebResponse</returns>
         public StreamReader GetNotesXMLCalendar()
         {
-            String iNotesUrl;           
+            String iNotesUrl;
+            WebProxy prox;
+            RegistryKey regCurrentUser, regUsers;
+            String sCurrentUserProxy, sUsersProxy;
+            String proxyHost;      
 
             DateTime startDateTime = DateTime.Now;
             DateTime endDateTime = startDateTime.AddDays(iDaysAhead);
@@ -124,11 +133,27 @@ namespace NotesToGoogle
 
             // Setup/Build the Lotus Notes request URL
             iNotesUrl = sNotesUrl + "/($calendar)?ReadViewEntries&KeyType=time&StartKey=" + startString + "&UntilKey=" + endString;
-            //MessageBox.Show(iNotesUrl, "URL", MessageBoxButtons.OK);
             xmlRequest = (HttpWebRequest)WebRequest.Create(iNotesUrl);
-            xmlRequest.Credentials = ncLotusCred;
+            xmlRequest.Credentials = ncLotusCred;            
             xmlRequest.KeepAlive = false;
+            xmlRequest.Method = "POST";
             xmlRequest.Timeout = 20000;
+
+            // If the notes URL contains HTTPS, we need to invalidate the cert, this assumes we know we are connecting to
+            // a work server and will always be true
+            if (iNotesUrl.Contains("https://"))
+            {   // http://support.microsoft.com/kb/823177/en-us
+                ServicePointManager.ServerCertificateValidationCallback =
+                    new RemoteCertificateValidationCallback(
+                    delegate(
+                        object sender2,
+                        X509Certificate certificate,
+                        X509Chain chain,
+                        SslPolicyErrors sslPolicyErrors)
+                    {
+                    return true;
+                });
+            }
 
             try
             {               
@@ -140,7 +165,8 @@ namespace NotesToGoogle
             }
             catch (WebException e)
             {
-                MessageBox.Show(e.Message, "error", MessageBoxButtons.OK);                
+                this.lasterror = "Getting Notes Data as XML: " + e.Message;
+                //MessageBox.Show(e.Message, "error", MessageBoxButtons.OK);                
                 resStream.Close();
                 xmlResponse.Close();
                 return (StreamReader)null;
@@ -155,8 +181,12 @@ namespace NotesToGoogle
         /// <returns>Whether or not the connection is ok</returns>
         public Boolean TestConnection()
         {
-            HttpWebResponse _webResponse;
+            //HttpWebResponse _webResponse;
             String iNotesUrl;
+            WebProxy prox;
+            RegistryKey regCurrentUser, regUsers;
+            String sCurrentUserProxy, sUsersProxy;
+            String proxyHost;
 
             try
             {
@@ -164,15 +194,75 @@ namespace NotesToGoogle
                 iNotesUrl = sNotesUrl + "/($calendar)?ReadViewEntries";
                 HttpWebRequest _webRequest = (HttpWebRequest)WebRequest.Create(iNotesUrl);
                 _webRequest.Credentials = ncLotusCred;
-                _webResponse = (HttpWebResponse)_webRequest.GetResponse();
+                _webRequest.KeepAlive = false;
+                _webRequest.Method = "POST";
+                _webRequest.Timeout = 20000;
+
+                /*
+                // If there is proxy information in registry
+                regCurrentUser = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings");
+                regUsers = Registry.Users.OpenSubKey(".DEFAULT\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings");
+
+                prox = new WebProxy();
+
+                if ((regCurrentUser != null) && Convert.ToInt32(regCurrentUser.GetValue("ProxyEnable").ToString()) == 1)
+                {
+                    sCurrentUserProxy = regCurrentUser.GetValue("ProxyServer").ToString();
+                    if (sCurrentUserProxy.Contains("http=")) {
+                        int httploc = sCurrentUserProxy.IndexOf("http=");
+                        proxyHost = sCurrentUserProxy.Substring(httploc + 5, sCurrentUserProxy.IndexOf(";", httploc)-1);
+                        prox.Address = new Uri(proxyHost);
+                    } else {
+                        proxyHost = "http://" + sCurrentUserProxy;
+                        prox.Address = new Uri(proxyHost);
+                    }
+                }
+
+                if ((regUsers != null) && Convert.ToInt32(regUsers.GetValue("ProxyEnable").ToString()) == 1)
+                {
+                    sUsersProxy = regUsers.GetValue("ProxyServer").ToString();
+                    if (sUsersProxy.Contains("http="))
+                    {
+                        int httploc = sUsersProxy.IndexOf("http=");
+                        proxyHost = sUsersProxy.Substring(httploc + 5, sUsersProxy.IndexOf(";", httploc) - 1);
+                        prox.Address = new Uri(proxyHost);
+                    }
+                    else
+                    {
+                        proxyHost = "http://" + sUsersProxy;
+                        prox.Address = new Uri(proxyHost);
+                    }
+                }
+
+                _webRequest.Proxy = prox;
+                */
+
+                // If the notes URL contains HTTPS, we need to invalidate the cert, this assumes we know we are connecting to
+                // a work server and will always be true
+                if (iNotesUrl.Contains("https://"))
+                {   // http://support.microsoft.com/kb/823177/en-us
+                    ServicePointManager.ServerCertificateValidationCallback =
+                        new RemoteCertificateValidationCallback(
+                        delegate(
+                            object sender2,
+                            X509Certificate certificate,
+                            X509Chain chain,
+                            SslPolicyErrors sslPolicyErrors)
+                        {
+                        return true;
+                    });
+                }
+
+                //_webResponse = (HttpWebResponse)_webRequest.GetResponse();
 
                 // Close the connections
-                _webResponse.Close();
+                //_webResponse.Close();
                 _webRequest.Abort();
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message, "error", MessageBoxButtons.OK);
+                this.lasterror = "Testing Notes Connection: " + e.Message;
+                //MessageBox.Show(e.Message, "error", MessageBoxButtons.OK);
                 return false;
             }
             return true;
@@ -253,6 +343,17 @@ namespace NotesToGoogle
             }
         }
 
+        /// <summary>
+        /// set get for last error
+        /// </summary>
+        public string LastError
+        {
+            get
+            {
+                return lasterror;
+            }
+        }
+
         // Private class variables
         private String sNotesUrl;
         private NetworkCredential ncLotusCred;
@@ -261,5 +362,6 @@ namespace NotesToGoogle
         private HttpWebResponse xmlResponse;
         private HttpWebRequest xmlRequest;
         StreamReader resStream;
+        private String lasterror;
     }
 }

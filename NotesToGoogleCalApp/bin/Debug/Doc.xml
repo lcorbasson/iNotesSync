@@ -105,6 +105,11 @@
             Accessor method for the Days Ahead variable
             </summary>
         </member>
+        <member name="P:NotesToGoogle.NotesServiceConnect.LastError">
+            <summary>
+            set get for last error
+            </summary>
+        </member>
         <member name="T:NotesToGoogle.NotesToGoogleForm">
             <summary>
             Public class NotesToGoogleForm creates the main window used for application.

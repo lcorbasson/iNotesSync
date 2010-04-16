@@ -60,12 +60,12 @@ namespace NotesToGoogle
 
             if (scGoogleService==null)
             {   // Google service is Null, cannot continue
-                if (worker != null) { throw new Exception("Google Service not initialized."); }
+                if (worker != null) { throw new Exception("Google Service not initialized.\r\n" + scGoogleService.LastError); }
                 return SYNCNULLGSERVICE;
             }
             else if (scNotesService == null)
             {   // Notes service is Null, cannot continue
-                if (worker != null) { throw new Exception("Notes Service not initialized."); }
+                if (worker != null) { throw new Exception("Notes Service not initialized.\r\n" + scNotesService.LastError); }
                 return SYNCNULLNSERVICE;
             }
             else // Services should be good, do work.
@@ -73,7 +73,7 @@ namespace NotesToGoogle
                 // Remove old notes entries from the calendar
                 if (scGoogleService.ClearEventEntriesBySearch("Created from [LNotes]") < 0)
                 {   // There was an error clearing calendar
-                    if (worker != null) { throw new Exception("Error deleting current Notes Entries."); }
+                    if (worker != null) { throw new Exception("Error deleting current Notes Entries.\r\n" + scGoogleService.LastError); }
                     return SYNCFAILCLEAR;
                 }
 
@@ -102,7 +102,7 @@ namespace NotesToGoogle
                     }
                     else
                     {
-                        if (worker != null) { throw new Exception("Unable to insert event."); }
+                        if (worker != null) { throw new Exception("Unable to insert event. " + scGoogleService.LastError); }
                         return SYNCFAILURE;
                     }
                 }
