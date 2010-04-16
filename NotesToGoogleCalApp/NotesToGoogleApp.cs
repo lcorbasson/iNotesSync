@@ -128,7 +128,7 @@ namespace NotesToGoogle
         private void UpdateUI()
         {
             // Setup information section
-            label_DateValue.Text = DateTime.Today.ToString();
+            label_DateValue.Text = DateTime.Now.ToString();
             label_VersionValue.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             textBox_AboutValue.Text = "Sync your Lotus Notes calendar to Google.  This allows update to your iPhone and other applications.";
         
@@ -324,7 +324,7 @@ namespace NotesToGoogle
             this.textBox_Debug.Text += " " + currentDebug.ToString() + "\r\n";
             this.textBox_Debug.Text += message + "\r\n \r\n";
 
-            this.textBox_Debug.Select(textBox_Debug.Text.Length, 0);
+            this.textBox_Debug.Select(textBox_Debug.Text.Length-2, 1);
             this.textBox_Debug.ScrollToCaret();
 
             if (checkBox_MessageBoxDebug.Checked)
@@ -1023,6 +1023,7 @@ namespace NotesToGoogle
             this.progressBar_SyncProgress.Size = new System.Drawing.Size(227, 16);
             this.progressBar_SyncProgress.Step = 5;
             this.progressBar_SyncProgress.TabIndex = 1;
+            this.progressBar_SyncProgress.Tag = "";
             // 
             // label_Status
             // 
@@ -1506,6 +1507,8 @@ namespace NotesToGoogle
                 // done at the same time.
                 // Disable the sync button, so we don't do this twice.
                 button_ManualSync.Enabled = false;
+                progressBar_SyncProgress.Value = 0;
+                progressBar_SyncProgress.ForeColor = Color.MediumBlue;
 
                 // Start the background worker.
                 backgroundWorker_SingleSync.RunWorkerAsync();
@@ -1543,16 +1546,17 @@ namespace NotesToGoogle
             if (e.Error != null)
             {   // EventArg e contained an error
                 PrintStringToDebug("Error during sync: " + e.Error.Message);
+                progressBar_SyncProgress.ForeColor = Color.Red;
             }
             else
             {
                 // If the Sync completed successfully; no errors within the EventArgs
                 PrintStringToDebug("Sync completed successfully; synced " + e.Result + " calendar entries.");
+                progressBar_SyncProgress.Value = 0;
             }
 
             // Enable the sync button so we can redo the sync
-            button_ManualSync.Enabled = true;
-            progressBar_SyncProgress.Value = 0;
+            button_ManualSync.Enabled = true;            
         }
 
         /// <summary>
@@ -1605,12 +1609,12 @@ namespace NotesToGoogle
             if (googleService == null || !googleService.TestConnection())
             {
                 e.Result = NotesToGoogleSync.SYNCNULLGSERVICE;
-                throw new Exception("Google service not initialized; check login information");               
+                throw new Exception("Google service not initialized; check login information. \r\n" + googleService.LastError);               
             }
             else if (notesService == null || !notesService.TestConnection())
             {
                 e.Result = NotesToGoogleSync.SYNCNULLNSERVICE;
-                throw new Exception("Notes service not initialized; check login information");
+                throw new Exception("Notes service not initialized; check login information. \r\n" + notesService.LastError);
             }
             else
             {

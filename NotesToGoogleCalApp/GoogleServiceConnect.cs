@@ -52,8 +52,17 @@ namespace NotesToGoogle
                 bUseSSL = _UseSSL;
                 bNotifications = _notifications;
                 iDaysAhead = 14;
+                lasterror = "";
 
                 csService = new CalendarService("NotesToGoogleApp");
+
+                // Proxy stuff
+                requestFactory = (GDataRequestFactory)csService.RequestFactory;
+                iProxy = WebRequest.DefaultWebProxy;
+                myProxy = new WebProxy(iProxy.GetProxy(new Uri("http://www.google.com")));
+                myProxy.Credentials = CredentialCache.DefaultCredentials;
+                myProxy.UseDefaultCredentials = false;
+                requestFactory.Proxy = myProxy;
                 
                 // Depending on the 
                 if (bUseSSL)
@@ -79,6 +88,7 @@ namespace NotesToGoogle
             }
             catch (ServiceUnavailableException e)
             {
+                this.lasterror = "Creating Google Connection: " + e.Message;
                 return;
             }
         }
@@ -109,6 +119,7 @@ namespace NotesToGoogle
             }
             catch (GDataRequestException ex)
             {
+                this.lasterror = "Creating GCalendar: " + ex.Message;
                 return (CalendarEntry) null;
             }
             return createdCalendar;
@@ -132,6 +143,7 @@ namespace NotesToGoogle
             }
             catch (Exception e)
             {
+                this.lasterror = "Deleting GCalendar: " + e.Message;
                 return isDeleted;
             }
 
@@ -164,17 +176,23 @@ namespace NotesToGoogle
                 query.StartTime = new DateTime(today.Year, today.Month, today.Day);
                     today = today.AddDays(iDaysAhead);
                 query.EndTime = new DateTime(today.Year, today.Month, today.Day);
-                
-                calFeed = csService.Query(query);                
+
+                requestFactory.CreateRequest(GDataRequestType.Query, query.Uri);
+                calFeed = csService.Query(query);
+               
                 foreach (EventEntry ev in calFeed.Entries)
                 {
-                    ev.BatchData = new GDataBatchEntryData("D", GDataBatchOperationType.delete); 
+                    requestFactory.CreateRequest(GDataRequestType.Delete, query.Uri);
+                    ev.Delete();
+                    //MessageBox.Show(ev.Summary.ToString(), "Events", MessageBoxButtons.OK);
+                    //ev.BatchData = new GDataBatchEntryData("D", GDataBatchOperationType.delete); 
                 }
 
-                batchFeed = (EventFeed)csService.Batch(calFeed, new Uri(calFeed.Batch));
+                //batchFeed = (EventFeed)csService.Batch(calFeed, new Uri(calFeed.Batch));
             }
             catch (Exception ex)
             {
+                this.lasterror = "Clearing Events from "+ _calendar + ": " + ex.Message;
                 return -1;
             }          
             return calFeed.Entries.Count;
@@ -235,6 +253,7 @@ namespace NotesToGoogle
             }
             catch (Exception e)
             {
+                this.lasterror = "Getting Calendar Info: " + e.Message;
                 return (CalendarEntry)null;
             }
 
@@ -257,6 +276,7 @@ namespace NotesToGoogle
             }
             catch (Exception e)
             {
+                this.lasterror = e.Message;
                 return false;
             }
             return true;
@@ -333,9 +353,8 @@ namespace NotesToGoogle
             CalendarEntry cal = GetCalendarByName(_calendarName);
             Reminder rem;
 
-            if (bNotifications)
-            {
-                MessageBox.Show("yes", "yes", MessageBoxButtons.OK);
+            if (bNotifications && !_toAdd.Title.Text.Contains("Holiday"))
+            {                
                 rem = new Reminder();
                 rem.Minutes = 30;
                 rem.Method = Reminder.ReminderMethod.email;
@@ -348,6 +367,7 @@ namespace NotesToGoogle
             }
             catch (Exception e)
             {
+                this.lasterror = "Inserting Calendar Events: " + e.Message;
                 return (EventEntry)null;
             }
 
@@ -364,7 +384,7 @@ namespace NotesToGoogle
             EventEntry insertedEvent;
             CalendarEntry cal = GetCalendarByName(defaultCalendar);
 
-            if (bNotifications)
+            if (bNotifications && !_toAdd.Title.Text.Contains("Holiday"))
             {                
                 rem = new Reminder();
                 rem.Minutes = 30;
@@ -374,10 +394,12 @@ namespace NotesToGoogle
 
             try
             {
+                requestFactory.CreateRequest(GDataRequestType.Insert, new Uri(GetAlternateURL(cal)));
                 insertedEvent = (EventEntry)csService.Insert(new Uri(GetAlternateURL(cal)), _toAdd);
             }
             catch (Exception e)
             {
+                this.lasterror = "Inserting Calendar Events: " + e.Message;
                 return (EventEntry)null;
             }
 
@@ -477,9 +499,21 @@ namespace NotesToGoogle
             }
         }
 
+        // Get method for last error
+        public string LastError
+        {
+            get
+            {
+                return lasterror;
+            }
+        }
+
 
         // Class variables
         CalendarService csService;
+        GDataRequestFactory requestFactory;
+        IWebProxy iProxy;
+        WebProxy myProxy;
         private String sHttpProtocol;        
         private String sOwnerCalURI;
         private String sGoogleLogin;
@@ -489,5 +523,6 @@ namespace NotesToGoogle
         private DateTime dtStartDate, dtEndDate;
         private string defaultCalendar;
         private int iDaysAhead;
+        private string lasterror;
     }
 }
