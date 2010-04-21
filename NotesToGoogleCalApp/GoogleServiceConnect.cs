@@ -56,14 +56,15 @@ namespace NotesToGoogle
 
                 csService = new CalendarService("NotesToGoogleApp");
 
-                // Proxy stuff
+                /* Proxy stuff
                 requestFactory = (GDataRequestFactory)csService.RequestFactory;
                 iProxy = WebRequest.DefaultWebProxy;
                 myProxy = new WebProxy(iProxy.GetProxy(new Uri("http://www.google.com")));
                 myProxy.Credentials = CredentialCache.DefaultCredentials;
                 myProxy.UseDefaultCredentials = false;
                 requestFactory.Proxy = myProxy;
-                
+                */
+
                 // Depending on the 
                 if (bUseSSL)
                 {
@@ -170,6 +171,14 @@ namespace NotesToGoogle
             {
                 // Create the query
                 calToSearch = GetCalendarByName(_calendar);
+
+                if (calToSearch == null)
+                {
+                    if (MessageBox.Show("Calendar " + defaultCalendar + " doesn't exist.  Would you like to create?", "Create Calendar", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        calToSearch = CreateCalendar(_calendar);
+                    }
+                }
                                 
                 query = new EventQuery(GetAlternateURL(calToSearch));
                 query.Query = _searchText;
@@ -177,18 +186,18 @@ namespace NotesToGoogle
                     today = today.AddDays(iDaysAhead);
                 query.EndTime = new DateTime(today.Year, today.Month, today.Day);
 
-                requestFactory.CreateRequest(GDataRequestType.Query, query.Uri);
+                //requestFactory.CreateRequest(GDataRequestType.Query, query.Uri);
                 calFeed = csService.Query(query);
                
                 foreach (EventEntry ev in calFeed.Entries)
                 {
-                    requestFactory.CreateRequest(GDataRequestType.Delete, query.Uri);
-                    ev.Delete();
+                    //requestFactory.CreateRequest(GDataRequestType.Delete, query.Uri);
+                    //ev.Delete();
                     //MessageBox.Show(ev.Summary.ToString(), "Events", MessageBoxButtons.OK);
-                    //ev.BatchData = new GDataBatchEntryData("D", GDataBatchOperationType.delete); 
+                    ev.BatchData = new GDataBatchEntryData("D", GDataBatchOperationType.delete); 
                 }
 
-                //batchFeed = (EventFeed)csService.Batch(calFeed, new Uri(calFeed.Batch));
+                batchFeed = (EventFeed)csService.Batch(calFeed, new Uri(calFeed.Batch));
             }
             catch (Exception ex)
             {
@@ -338,7 +347,7 @@ namespace NotesToGoogle
             {
                 alternateLink.Replace("http://", "https://");
             }
-
+         
             return alternateLink;
         }
 
@@ -352,6 +361,14 @@ namespace NotesToGoogle
             EventEntry insertedEvent;
             CalendarEntry cal = GetCalendarByName(_calendarName);
             Reminder rem;
+
+            if (cal == null)
+            {
+                if (MessageBox.Show("Calendar " + defaultCalendar + " doesn't exist.  Would you like to create?", "Create Calendar", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    cal = CreateCalendar(defaultCalendar);
+                }
+            }
 
             if (bNotifications && !_toAdd.Title.Text.Contains("Holiday"))
             {                
@@ -384,6 +401,14 @@ namespace NotesToGoogle
             EventEntry insertedEvent;
             CalendarEntry cal = GetCalendarByName(defaultCalendar);
 
+            if (cal == null)
+            {
+                if (MessageBox.Show("Calendar " + defaultCalendar + " doesn't exist.  Would you like to create?", "Create Calendar", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    cal = CreateCalendar(defaultCalendar);
+                }
+            }
+            
             if (bNotifications && !_toAdd.Title.Text.Contains("Holiday"))
             {                
                 rem = new Reminder();
@@ -394,7 +419,7 @@ namespace NotesToGoogle
 
             try
             {
-                requestFactory.CreateRequest(GDataRequestType.Insert, new Uri(GetAlternateURL(cal)));
+                //requestFactory.CreateRequest(GDataRequestType.Insert, new Uri(GetAlternateURL(cal)));
                 insertedEvent = (EventEntry)csService.Insert(new Uri(GetAlternateURL(cal)), _toAdd);
             }
             catch (Exception e)

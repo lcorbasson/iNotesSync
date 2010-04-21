@@ -82,12 +82,12 @@ namespace NotesToGoogle
                 // Get the XML stream
                 xmlStream = scNotesService.GetNotesXMLCalendar();
                 if (xmlStream == null) { throw new Exception("The connection to Notes timed out."); }
-
                 if (worker != null) { worker.ReportProgress(25); }          // Update progress bar; if background process exists
 
                 // Parse the XML into a List of EventEntries
                 newEvents = ConvertXMLtoEvents(xmlStream);
                 listCount = newEvents.Count;
+                if (worker != null) { worker.ReportProgress(30); }          // Update progress bar; if background process exists
 
                 intval = 0;
                 foreach (EventEntry ent in newEvents)
@@ -97,7 +97,7 @@ namespace NotesToGoogle
                     if (scGoogleService.InsertEvent(ent) != null)
                     {
                         retVal++;
-                        progressCount = ((75 / listCount) * intval) + 25;
+                        progressCount = ((70 / listCount) * intval) + 30;
                         if (worker != null) { worker.ReportProgress(progressCount); }
                     }
                     else
@@ -149,12 +149,16 @@ namespace NotesToGoogle
         /// </summary>
         /// <param name="_stream">XML stream passed in to create XMLTextReader</param>
         /// <returns>List of EventEntry objects</returns>
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()] 
         private List<EventEntry> ConvertXMLtoEvents(StreamReader _stream)
         {
+            //MessageBox.Show("Created XML reader", "xml", MessageBoxButtons.OK);
             List<EventEntry> events = new List<EventEntry>();   // List of events to return
             XmlTextReader xmlReader = new XmlTextReader(_stream);   // XMLTextReader from passed stream
-            xmlReader.WhitespaceHandling = WhitespaceHandling.None;
-            Boolean fulldayevent;
+            xmlReader.WhitespaceHandling = WhitespaceHandling.All;
+            //XmlReader xmlReader = XmlReader.Create(_stream);
+            Boolean fulldayevent, remindevent;
+            //MessageBox.Show("Done creating reader", "xml", MessageBoxButtons.OK);
 
             EventEntry newEvent = null;
             String sValue;                              // Short term holding of datetime string
@@ -162,31 +166,37 @@ namespace NotesToGoogle
             DateTime fullDateTime = DateTime.Now;
             DateTime endDateTime = startDateTime.AddHours(1);
             When eventWhen;
-
+        
             // Read Elements (forced top level)
             xmlReader.ReadToFollowing("viewentry");
+            //xmlReader.Read();
             while (!xmlReader.EOF)
             {
+                //MessageBox.Show("Reading <viewentry>", "xml", MessageBoxButtons.OK);
                 fulldayevent = false;
+                remindevent = false;
 
                 // <viewentry>
                 if (xmlReader.IsStartElement() && xmlReader.Name == "viewentry")
                 {
                     newEvent = new EventEntry();    // Create new event for this viewentry                                                                   
+                    newEvent.Title.Text = "";
 
                     // <entrydata>
                     for (int i = 0; i < 6; i++)
                     {                        
                         xmlReader.ReadToFollowing("entrydata");
+                        //MessageBox.Show("Reading <entrydata>", "xml", MessageBoxButtons.OK);
 
                         if (xmlReader.IsStartElement() && xmlReader.Name == "entrydata")
                         {   // Read the Name attribute of <entrydata>
                             xmlReader.MoveToAttribute("name");
+                            //MessageBox.Show("Reading attribute name", "xml", MessageBoxButtons.OK);
 
                             // Switch based on what name=??
                             switch (xmlReader.Value)
                             {
-                                // 136 - start date from datetime.value
+                                // 134 - start date from datetime.value
                                 case FULLDAYEVENTFIELD:
                                     xmlReader.ReadToFollowing("datetime");
                                     xmlReader.Read();
@@ -221,7 +231,7 @@ namespace NotesToGoogle
                                     break;
                                 // 146 - end date from datetime.value
                                 case ENDDATETIMEFIELD:
-                                    if (!fulldayevent)
+                                    if (!(fulldayevent || remindevent))
                                     {
                                         xmlReader.ReadToFollowing("datetime");
                                         xmlReader.Read();
@@ -239,49 +249,73 @@ namespace NotesToGoogle
                                         endDateTime = fullDateTime.AddHours(23);
                                     }
                                     break;
-                                // 149 - 160-appoint 158-meeting 177-holiday
+                                // 149 - 160-appoint 158-meeting 177-holiday 10-reminder
                                 case ENTRYTYPEFIELD:
                                     xmlReader.ReadToFollowing("number");
                                     xmlReader.Read();
 
                                     //MessageBox.Show("type " + sValue + " is " + sValue.Length.ToString(), "sValue", MessageBoxButtons.OK);
 
-                                    if (xmlReader.Value == "160")
+                                    if ((xmlReader.Value == "160") || (xmlReader.Value == "205"))
                                     {   // This is an Appointment
-                                        newEvent.Title.Text += "Appoint: ";
+                                        newEvent.Title.Text += "App: ";
                                     }
-                                    else if (xmlReader.Value == "158")
+                                    else if ((xmlReader.Value == "158") || (xmlReader.Value=="210"))
                                     {   // This is a Meeting
-                                        newEvent.Title.Text += "Meeting: ";
+                                        newEvent.Title.Text += "Meet: ";
                                     }
                                     else if (xmlReader.Value == "177")
                                     {
-                                        newEvent.Title.Text += "Holiday: ";
+                                        newEvent.Title.Text += "Hol: ";
                                         fulldayevent = true;
+                                    }
+                                    else if ((xmlReader.Value == "194") || (xmlReader.Value == "199"))
+                                    {
+                                        newEvent.Title.Text += "Full: ";
+                                        fulldayevent = true;
+                                    }
+                                    else if ((xmlReader.Value == "10") || (xmlReader.Value == "195"))
+                                    {   // This is a full day reminder type
+                                        newEvent.Title.Text += "Rem: ";
+                                        remindevent = true;
                                     }
                                     break;
                                 // 147 - go to text elements
                                 case CONTENTFIELD:
 
                                     xmlReader.Read();   // <textlist>
+                                    int textcount = 0;
                                     do
                                     {
-                                        if ((xmlReader.NodeType == XmlNodeType.Element) && (xmlReader.Name == "text"))
+                                        if (xmlReader.IsStartElement() && xmlReader.Name == "text")
                                         {
                                             xmlReader.Read();   // Text element within <text>
+                                            //MessageBox.Show(xmlReader.Value, "value", MessageBoxButtons.OK);
+                                            
                                             if (xmlReader.Value.ToString().Contains("Location:"))
                                             {   // Set the event Location to the Location string
                                                 newEvent.Locations.Add(new Where("", "", xmlReader.Value));
                                             }
                                             else if (xmlReader.Value.ToString().Contains("Chair:"))
                                             {   // Add the Chair contents to Summary
-                                                newEvent.Summary.Text += xmlReader.Value;
+                                                newEvent.Content.Content += xmlReader.Value+"\r\n";
                                             }
                                             else
                                             {   // Add the text value to summary
-                                                newEvent.Title.Text += xmlReader.Value;
-                                                newEvent.Content.Content += xmlReader.Value;
+                                                switch (textcount)
+                                                {
+                                                    case 0:
+                                                        newEvent.Title.Text += xmlReader.Value;
+                                                        break;
+                                                    case 1:
+                                                        newEvent.Locations.Add(new Where("", "", xmlReader.Value));
+                                                        break;
+                                                    default:
+                                                        newEvent.Content.Content += xmlReader.Value + "\r\n";
+                                                        break;
+                                                }                                                                                                
                                             }
+                                            textcount++;
                                         }
                                         xmlReader.Read();
                                     } while ((xmlReader.Name != "textlist") && (xmlReader.Name != "entrydata")); // </textlist> or </entrydata>
@@ -306,7 +340,14 @@ namespace NotesToGoogle
                     }
                     else
                     {
-                        eventWhen = new When(startDateTime, endDateTime);
+                        if (remindevent)
+                        {
+                            eventWhen = new When(startDateTime, startDateTime.AddHours(1));
+                        }
+                        else
+                        {
+                            eventWhen = new When(startDateTime, endDateTime);
+                        }
                     }
 
                     newEvent.Times.Add(eventWhen);                    
@@ -315,7 +356,6 @@ namespace NotesToGoogle
                 }
 
                 xmlReader.ReadToFollowing("viewentry");     // Go to the next <viewentry>
-
             } // </viewEntry>
 
             xmlReader.Close();
