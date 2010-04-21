@@ -123,7 +123,8 @@ namespace NotesToGoogle
             WebProxy prox;
             RegistryKey regCurrentUser, regUsers;
             String sCurrentUserProxy, sUsersProxy;
-            String proxyHost;      
+            String proxyHost;
+            CookieContainer cookies;
 
             DateTime startDateTime = DateTime.Now;
             DateTime endDateTime = startDateTime.AddDays(iDaysAhead);
@@ -132,13 +133,8 @@ namespace NotesToGoogle
             String endString = endDateTime.ToString("yyyyMMddT235959");
 
             // Setup/Build the Lotus Notes request URL
-            iNotesUrl = sNotesUrl + "/($calendar)?ReadViewEntries&KeyType=time&StartKey=" + startString + "&UntilKey=" + endString;
-            xmlRequest = (HttpWebRequest)WebRequest.Create(iNotesUrl);
-            xmlRequest.Credentials = ncLotusCred;            
-            xmlRequest.KeepAlive = false;
-            xmlRequest.Method = "POST";
-            xmlRequest.Timeout = 20000;
-
+            iNotesUrl = sNotesUrl + "/($calendar)?ReadViewEntries&KeyType=time&StartKey=" + startString + "&UntilKey=" + endString;            
+            
             // If the notes URL contains HTTPS, we need to invalidate the cert, this assumes we know we are connecting to
             // a work server and will always be true
             if (iNotesUrl.Contains("https://"))
@@ -151,24 +147,63 @@ namespace NotesToGoogle
                         X509Chain chain,
                         SslPolicyErrors sslPolicyErrors)
                     {
-                    return true;
-                });
+                        return true;
+                    });
             }
 
             try
-            {               
+            {
+                cookies = new CookieContainer();
+                xmlRequest = (HttpWebRequest)WebRequest.Create(iNotesUrl);
+                xmlRequest.CookieContainer = cookies;
+                xmlRequest.Accept = "image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, application/x-shockwave-flash, application/x-silverlight, */*";
+                xmlRequest.UserAgent = "iNotes to Google";
+                xmlRequest.KeepAlive = false;
+                xmlRequest.Method = "POST";
+
+                // Differenciate between (?Login) and Server Authentication
+                if (bServerAuth)
+                {
+                    //loginRequest = (HttpWebRequest)WebRequest.Create(sNotesUrl + "/?Login&username="+ncLotusCred.UserName.ToString()+"&password="+ncLotusCred.Password.ToString());
+                    loginRequest = (HttpWebRequest)WebRequest.Create(sNotesUrl + "/?Login");
+                    loginRequest.CookieContainer = cookies;
+                    loginRequest.Accept = "image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, application/x-shockwave-flash, application/x-silverlight, */*";
+                    loginRequest.UserAgent = "iNotes to Google";
+                    loginRequest.Method = "POST";
+                    loginRequest.KeepAlive = true;
+                    loginRequest.MaximumAutomaticRedirections = 5;
+                    loginRequest.AllowAutoRedirect = true;
+
+                    // Add login data to POST
+                    var requestStream = loginRequest.GetRequestStream();
+                    var loginData = Encoding.Default.GetBytes("&username=" + ncLotusCred.UserName.ToString() + "&password=" + ncLotusCred.Password.ToString());
+                    requestStream.Write(loginData, 0, loginData.Length);
+                    requestStream.Close();
+
+                    // Login
+                    loginResponse = loginRequest.GetResponse() as HttpWebResponse;
+
+                    //StreamReader reader2 = new StreamReader(loginResponse.GetResponseStream(), System.Text.Encoding.UTF8);
+                    //MessageBox.Show(reader2.ReadToEnd(), "stream", MessageBoxButtons.OK);
+                }
+                else
+                {
+                    xmlRequest.Credentials = ncLotusCred;
+                }
+                                 
                 // Call the request
-                xmlResponse = (HttpWebResponse)xmlRequest.GetResponse();
+                xmlResponse = xmlRequest.GetResponse() as HttpWebResponse;
 
                 // Work with response/Return data
                 resStream = new StreamReader(xmlResponse.GetResponseStream());
+                //MessageBox.Show(resStream.ReadToEnd(), "stream", MessageBoxButtons.OK);
             }
             catch (WebException e)
             {
                 this.lasterror = "Getting Notes Data as XML: " + e.Message;
                 //MessageBox.Show(e.Message, "error", MessageBoxButtons.OK);                
-                resStream.Close();
-                xmlResponse.Close();
+                if (resStream != null) { resStream.Close(); }
+                if (xmlResponse != null) { xmlResponse.Close(); }
                 return (StreamReader)null;
             }
 
@@ -355,12 +390,12 @@ namespace NotesToGoogle
         }
 
         // Private class variables
-        private String sNotesUrl;
+        private String sNotesUrl, sLoginData;
         private NetworkCredential ncLotusCred;
         private Boolean bServerAuth;
         private int iDaysAhead;
-        private HttpWebResponse xmlResponse;
-        private HttpWebRequest xmlRequest;
+        private HttpWebResponse xmlResponse, loginResponse;
+        private HttpWebRequest xmlRequest, loginRequest;
         StreamReader resStream;
         private String lasterror;
     }

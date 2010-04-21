@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using System.Security.Cryptography;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
@@ -48,10 +49,17 @@ namespace NotesToGoogle
 
                 foreach (DictionaryEntry de in htSyncPreferences)
                 {
+                    String _element = "";
                     //xPrefWriter.WriteElementString(de.Key.ToString(), de.Value.ToString());
                     //xPrefWriter.WriteWhitespace("\n");
-
-                    String _element = "\t<Setting name=\"" + de.Key.ToString() + "\">" + de.Value.ToString() + "</Setting>\n";
+                    if (de.Key.ToString().Contains("Password"))
+                    {
+                        _element = "\t<Setting name=\"" + de.Key.ToString() + "\">" + EncryptString(de.Value.ToString(),hidden) + "</Setting>\n";
+                    }
+                    else
+                    {
+                        _element = "\t<Setting name=\"" + de.Key.ToString() + "\">" + de.Value.ToString() + "</Setting>\n";                        
+                    }
                     xPrefWriter.WriteRaw(_element);
                 }
 
@@ -83,7 +91,15 @@ namespace NotesToGoogle
                         if ((xPrefReader.IsStartElement()) && (xPrefReader.Name == "Setting"))
                         {
                             // Insert into the Hash table with Key=Attribute and Value=ElementAsString()
-                            htSyncPreferences.Add(xPrefReader.GetAttribute(0), xPrefReader.ReadElementContentAsString());
+                            String name = xPrefReader.GetAttribute(0);
+                            String value = xPrefReader.ReadElementContentAsString();
+
+                            if (name.Contains("Password"))
+                            {
+                                value = DecryptString(value, hidden);
+                            }
+
+                            htSyncPreferences.Add(name, value);
                         }
                     }
 
@@ -137,8 +153,90 @@ namespace NotesToGoogle
             return _prefValue;
         }
 
+        public static string EncryptString(string Message, string Passphrase)
+        {
+            byte[] Results;
+            System.Text.UTF8Encoding UTF8 = new System.Text.UTF8Encoding();
+
+            // Step 1. We hash the passphrase using MD5
+            // We use the MD5 hash generator as the result is a 128 bit byte array
+            // which is a valid length for the TripleDES encoder we use below
+
+            MD5CryptoServiceProvider HashProvider = new MD5CryptoServiceProvider();
+            byte[] TDESKey = HashProvider.ComputeHash(UTF8.GetBytes(Passphrase));
+
+            // Step 2. Create a new TripleDESCryptoServiceProvider object
+            TripleDESCryptoServiceProvider TDESAlgorithm = new TripleDESCryptoServiceProvider();
+
+            // Step 3. Setup the encoder
+            TDESAlgorithm.Key = TDESKey;
+            TDESAlgorithm.Mode = CipherMode.ECB;
+            TDESAlgorithm.Padding = PaddingMode.PKCS7;
+
+            // Step 4. Convert the input string to a byte[]
+            byte[] DataToEncrypt = UTF8.GetBytes(Message);
+
+            // Step 5. Attempt to encrypt the string
+            try
+            {
+                ICryptoTransform Encryptor = TDESAlgorithm.CreateEncryptor();
+                Results = Encryptor.TransformFinalBlock(DataToEncrypt, 0, DataToEncrypt.Length);
+            }
+            finally
+            {
+                // Clear the TripleDes and Hashprovider services of any sensitive information
+                TDESAlgorithm.Clear();
+                HashProvider.Clear();
+            }
+
+            // Step 6. Return the encrypted string as a base64 encoded string
+            return Convert.ToBase64String(Results);
+        }
+
+        public static string DecryptString(string Message, string Passphrase)
+        {
+            byte[] Results;
+            System.Text.UTF8Encoding UTF8 = new System.Text.UTF8Encoding();
+
+            // Step 1. We hash the passphrase using MD5
+            // We use the MD5 hash generator as the result is a 128 bit byte array
+            // which is a valid length for the TripleDES encoder we use below
+
+            MD5CryptoServiceProvider HashProvider = new MD5CryptoServiceProvider();
+            byte[] TDESKey = HashProvider.ComputeHash(UTF8.GetBytes(Passphrase));
+
+            // Step 2. Create a new TripleDESCryptoServiceProvider object
+            TripleDESCryptoServiceProvider TDESAlgorithm = new TripleDESCryptoServiceProvider();
+
+            // Step 3. Setup the decoder
+            TDESAlgorithm.Key = TDESKey;
+            TDESAlgorithm.Mode = CipherMode.ECB;
+            TDESAlgorithm.Padding = PaddingMode.PKCS7;
+
+            // Step 4. Convert the input string to a byte[]
+            byte[] DataToDecrypt = Convert.FromBase64String(Message);
+
+            // Step 5. Attempt to decrypt the string
+            try
+            {
+                ICryptoTransform Decryptor = TDESAlgorithm.CreateDecryptor();
+                Results = Decryptor.TransformFinalBlock(DataToDecrypt, 0, DataToDecrypt.Length);
+            }
+            finally
+            {
+                // Clear the TripleDes and Hashprovider services of any sensitive information
+                TDESAlgorithm.Clear();
+                HashProvider.Clear();
+            }
+
+            // Step 6. Return the decrypted string in UTF8 format
+            return UTF8.GetString(Results);
+        }
+
         // Class variables
         Hashtable htSyncPreferences;
+        String sPrefPath = "";
         String sPrefFile = "NotesToGoogleCal.preference";
+        String hidden = "hidden";
     }
 }

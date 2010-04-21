@@ -321,11 +321,13 @@ namespace NotesToGoogle
         {
             DateTime currentDebug = DateTime.Now;
 
-            this.textBox_Debug.Text += " " + currentDebug.ToString() + "\r\n";
-            this.textBox_Debug.Text += message + "\r\n \r\n";
+            //this.textBox_Debug.Text += " " + currentDebug.ToString() + "\r\n";
+            //this.textBox_Debug.Text += message + "\r\n \r\n";
+            //this.textBox_Debug.Select(textBox_Debug.Text.Length-2, 1);
+            //this.textBox_Debug.ScrollToCaret();
 
-            this.textBox_Debug.Select(textBox_Debug.Text.Length-2, 1);
-            this.textBox_Debug.ScrollToCaret();
+            this.textBox_Debug.AppendText(" " + currentDebug.ToString() + "\r\n");
+            this.textBox_Debug.AppendText(message + "\r\n \r\n");
 
             if (checkBox_MessageBoxDebug.Checked)
             {
@@ -704,9 +706,9 @@ namespace NotesToGoogle
             this.checkBox_NotesServerAuth.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox_NotesServerAuth.Location = new System.Drawing.Point(6, 29);
             this.checkBox_NotesServerAuth.Name = "checkBox_NotesServerAuth";
-            this.checkBox_NotesServerAuth.Size = new System.Drawing.Size(157, 19);
+            this.checkBox_NotesServerAuth.Size = new System.Drawing.Size(159, 19);
             this.checkBox_NotesServerAuth.TabIndex = 6;
-            this.checkBox_NotesServerAuth.Text = "Use server Athentication";
+            this.checkBox_NotesServerAuth.Text = "Use Notes Login Screen";
             this.checkBox_NotesServerAuth.UseVisualStyleBackColor = true;
             // 
             // checkBox_CustomDaysAhead
@@ -779,9 +781,10 @@ namespace NotesToGoogle
             this.textBox_OtherCalName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.textBox_OtherCalName.Location = new System.Drawing.Point(298, 26);
             this.textBox_OtherCalName.Name = "textBox_OtherCalName";
-            this.textBox_OtherCalName.Size = new System.Drawing.Size(143, 21);
+            this.textBox_OtherCalName.Size = new System.Drawing.Size(126, 21);
             this.textBox_OtherCalName.TabIndex = 3;
             this.textBox_OtherCalName.Text = "Lotus.Notes";
+            this.textBox_OtherCalName.WordWrap = false;
             this.textBox_OtherCalName.LostFocus += new System.EventHandler(this.textBox_OtherCalName_LostFocus);
             // 
             // checkBox_ConnectUsingSSL
@@ -1600,7 +1603,7 @@ namespace NotesToGoogle
 
             // Create the Lotus Notes service
             NotesServiceConnect notesService = new NotesServiceConnect(
-                textBox_NotesLogin.Text, textBox_NotesPassword.Text, textBox_WebmailURL.Text, daysAheadToCheck);
+                textBox_NotesLogin.Text, textBox_NotesPassword.Text, textBox_WebmailURL.Text, checkBox_NotesServerAuth.Checked, daysAheadToCheck);            
 
             bWorker.ReportProgress(10);
 
