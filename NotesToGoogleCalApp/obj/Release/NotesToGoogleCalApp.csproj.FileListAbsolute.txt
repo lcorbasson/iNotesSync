@@ -34,3 +34,5 @@ C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToG
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Release\NotesToGoogleCal.exe
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Release\NotesToGoogleCal.pdb
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\bin\Release\Doc.xml
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\NotesToGoogleCal.exe.config
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\Doc.xml

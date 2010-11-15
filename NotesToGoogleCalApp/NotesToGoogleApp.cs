@@ -496,7 +496,7 @@ namespace NotesToGoogle
             // 
             this.textBox_GooglePassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_GooglePassword.Location = new System.Drawing.Point(139, 51);
-            this.textBox_GooglePassword.MaxLength = 20;
+            this.textBox_GooglePassword.MaxLength = 50;
             this.textBox_GooglePassword.Name = "textBox_GooglePassword";
             this.textBox_GooglePassword.PasswordChar = '*';
             this.textBox_GooglePassword.Size = new System.Drawing.Size(177, 21);
@@ -506,7 +506,7 @@ namespace NotesToGoogle
             // 
             this.textBox_GoogleLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_GoogleLogin.Location = new System.Drawing.Point(139, 21);
-            this.textBox_GoogleLogin.MaxLength = 50;
+            this.textBox_GoogleLogin.MaxLength = 80;
             this.textBox_GoogleLogin.Name = "textBox_GoogleLogin";
             this.textBox_GoogleLogin.Size = new System.Drawing.Size(177, 21);
             this.textBox_GoogleLogin.TabIndex = 10;
@@ -561,7 +561,7 @@ namespace NotesToGoogle
             // 
             this.textBox_NotesPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_NotesPassword.Location = new System.Drawing.Point(139, 84);
-            this.textBox_NotesPassword.MaxLength = 20;
+            this.textBox_NotesPassword.MaxLength = 50;
             this.textBox_NotesPassword.Name = "textBox_NotesPassword";
             this.textBox_NotesPassword.PasswordChar = '*';
             this.textBox_NotesPassword.Size = new System.Drawing.Size(177, 21);
@@ -571,7 +571,7 @@ namespace NotesToGoogle
             // 
             this.textBox_NotesLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_NotesLogin.Location = new System.Drawing.Point(139, 54);
-            this.textBox_NotesLogin.MaxLength = 20;
+            this.textBox_NotesLogin.MaxLength = 80;
             this.textBox_NotesLogin.Name = "textBox_NotesLogin";
             this.textBox_NotesLogin.Size = new System.Drawing.Size(177, 21);
             this.textBox_NotesLogin.TabIndex = 8;
