@@ -34,3 +34,20 @@ C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToG
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Debug\fr-FR\NotesToGoogleCal.resources.dll
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Debug\NotesToGoogleCal.exe
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Debug\NotesToGoogleCal.pdb
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Debug\ResolveAssemblyReference.cache
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Debug\NotesToGoogle.NotesToGoogleForm.resources
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Debug\NotesToGoogle.Properties.Resources.resources
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Debug\NotesToGoogleCalApp.csproj.GenerateResource.Cache
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Debug\Resources\NotesToGoogleLogo.jpg
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Debug\Doc.xml
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Debug\NotesToGoogle.exe.config
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Debug\NotesToGoogle.exe
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Debug\NotesToGoogle.pdb
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Debug\NotesToGoogle.exe
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Debug\NotesToGoogle.pdb
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Debug\en-CA\NotesToGoogle.resources.dll
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Debug\fr-FR\NotesToGoogle.resources.dll
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Debug\NotesToGoogle.Localization.en-CA.resources
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Debug\NotesToGoogle.Localization.fr-FR.resources
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Debug\en-CA\NotesToGoogle.resources.dll
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Debug\fr-FR\NotesToGoogle.resources.dll

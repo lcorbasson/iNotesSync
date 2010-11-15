@@ -1,23 +1,48 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>NotesToGoogleCal</name>
+        <name>NotesToGoogle</name>
     </assembly>
     <members>
-        <member name="T:NotesToGoogle.Properties.Resources">
+        <member name="T:NotesToGoogle.NotesToGoogleSync">
             <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
+            NotesToGoogleSync class extends the Thread class.  It is run as an extra thread and is responsible
+            for the actual syncing between Notes and Google.
             </summary>
         </member>
-        <member name="P:NotesToGoogle.Properties.Resources.ResourceManager">
+        <member name="M:NotesToGoogle.NotesToGoogleSync.#ctor">
             <summary>
-              Returns the cached ResourceManager instance used by this class.
+            Constructor with no parameters
             </summary>
         </member>
-        <member name="P:NotesToGoogle.Properties.Resources.Culture">
+        <member name="M:NotesToGoogle.NotesToGoogleSync.#ctor(NotesToGoogle.GoogleServiceConnect,NotesToGoogle.NotesServiceConnect)">
             <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
+            Constructor with GoogleServiceConnect and NotesServiceConnect parameters
+            </summary>
+            <param name="_googleService">Object representing the googleServiceConnector</param>
+            <param name="_notesService">Object representing the notesServiceConnector</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleSync.Sync(System.ComponentModel.BackgroundWorker,System.ComponentModel.DoWorkEventArgs)">
+            <summary>
+            Method called to initiate the sync process.
+            </summary>
+            <returns>Returns the success value</returns>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleSync.ConvertXMLtoEvents(System.IO.StreamReader)">
+            <summary>
+            Method returns a list of EventEntries to be input into GoogleService
+            </summary>
+            <param name="_stream">XML stream passed in to create XMLTextReader</param>
+            <returns>List of EventEntry objects</returns>
+        </member>
+        <member name="P:NotesToGoogle.NotesToGoogleSync.GoogleService">
+            <summary>
+            Accessor method for GoogleService
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.NotesToGoogleSync.NotesService">
+            <summary>
+            Accessor method for NotesService
             </summary>
         </member>
         <member name="T:NotesToGoogle.NotesServiceConnect">
@@ -548,45 +573,20 @@
             Accessor method for Days ahead information
             </summary>
         </member>
-        <member name="T:NotesToGoogle.NotesToGoogleSync">
+        <member name="T:NotesToGoogle.Properties.Resources">
             <summary>
-            NotesToGoogleSync class extends the Thread class.  It is run as an extra thread and is responsible
-            for the actual syncing between Notes and Google.
+              A strongly-typed resource class, for looking up localized strings, etc.
             </summary>
         </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.#ctor">
+        <member name="P:NotesToGoogle.Properties.Resources.ResourceManager">
             <summary>
-            Constructor with no parameters
+              Returns the cached ResourceManager instance used by this class.
             </summary>
         </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.#ctor(NotesToGoogle.GoogleServiceConnect,NotesToGoogle.NotesServiceConnect)">
+        <member name="P:NotesToGoogle.Properties.Resources.Culture">
             <summary>
-            Constructor with GoogleServiceConnect and NotesServiceConnect parameters
-            </summary>
-            <param name="_googleService">Object representing the googleServiceConnector</param>
-            <param name="_notesService">Object representing the notesServiceConnector</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.Sync(System.ComponentModel.BackgroundWorker,System.ComponentModel.DoWorkEventArgs)">
-            <summary>
-            Method called to initiate the sync process.
-            </summary>
-            <returns>Returns the success value</returns>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.ConvertXMLtoEvents(System.IO.StreamReader)">
-            <summary>
-            Method returns a list of EventEntries to be input into GoogleService
-            </summary>
-            <param name="_stream">XML stream passed in to create XMLTextReader</param>
-            <returns>List of EventEntry objects</returns>
-        </member>
-        <member name="P:NotesToGoogle.NotesToGoogleSync.GoogleService">
-            <summary>
-            Accessor method for GoogleService
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.NotesToGoogleSync.NotesService">
-            <summary>
-            Accessor method for NotesService
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
             </summary>
         </member>
     </members>

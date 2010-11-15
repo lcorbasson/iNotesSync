@@ -117,4 +117,100 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="button_ClearDebug" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="button_CreateService" xml:space="preserve">
+    <value>Create Service</value>
+  </data>
+  <data name="button_ManualSync" xml:space="preserve">
+    <value>Sync</value>
+  </data>
+  <data name="button_SaveSettings" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="checkBox_ConnectUsingSSL" xml:space="preserve">
+    <value>Connect using SSL</value>
+  </data>
+  <data name="checkBox_CreateNotification" xml:space="preserve">
+    <value>Create Notification (30 mins)</value>
+  </data>
+  <data name="checkBox_CustomDaysAhead" xml:space="preserve">
+    <value>Custom Days Ahead (default 14)</value>
+  </data>
+  <data name="checkBox_MessageBoxDebug" xml:space="preserve">
+    <value>Debug Messages</value>
+  </data>
+  <data name="checkBox_MinimizeToTray" xml:space="preserve">
+    <value>Minimize to Tray</value>
+  </data>
+  <data name="checkBox_NotesServerAuth" xml:space="preserve">
+    <value>Notes Login Screen</value>
+  </data>
+  <data name="checkBox_ScheduleSync" xml:space="preserve">
+    <value>Schedule Sync</value>
+  </data>
+  <data name="checkBox_StartMinimized" xml:space="preserve">
+    <value>Start Minimized</value>
+  </data>
+  <data name="checkBox_SyncOnStartup" xml:space="preserve">
+    <value>Sync On Startup</value>
+  </data>
+  <data name="label_About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="label_Author" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="label_Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="label_GoogleLogin" xml:space="preserve">
+    <value>Google Login</value>
+  </data>
+  <data name="label_GooglePassword" xml:space="preserve">
+    <value>Google Password</value>
+  </data>
+  <data name="label_NotesLogin" xml:space="preserve">
+    <value>Notes Login</value>
+  </data>
+  <data name="label_NotesPassword" xml:space="preserve">
+    <value>Notes Password</value>
+  </data>
+  <data name="label_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="label_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="radioButton_English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="radioButton_French" xml:space="preserve">
+    <value>French</value>
+  </data>
+  <data name="radioButton_MainCalChoice" xml:space="preserve">
+    <value>Main Calendar</value>
+  </data>
+  <data name="radioButton_OtherCalChoice" xml:space="preserve">
+    <value>Other Calendar</value>
+  </data>
+  <data name="tabPage_Connect" xml:space="preserve">
+    <value>Connection</value>
+  </data>
+  <data name="tabPage_Debug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="tabPage_Preferences" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="tabPage_SchedulingSync" xml:space="preserve">
+    <value>Scheduling</value>
+  </data>
+  <data name="textBox_AboutValue" xml:space="preserve">
+    <value>NotesToGoogle sync updates the Google Calendar through a connection to your Domino webmail.</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Notes to Google Sync</value>
+  </data>
 </root>
