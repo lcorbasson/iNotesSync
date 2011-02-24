@@ -81,7 +81,7 @@ namespace NotesToGoogle
 
                 // Get the XML stream
                 xmlStream = scNotesService.GetNotesXMLCalendar();
-                if (xmlStream == null) { throw new Exception("The connection to Notes timed out."); }
+                if (xmlStream == null) { throw new Exception("Unable to get XML stream from Domino; check URL and Login information."); }
                 if (worker != null) { worker.ReportProgress(25); }          // Update progress bar; if background process exists
 
                 // Parse the XML into a List of EventEntries
@@ -189,7 +189,8 @@ namespace NotesToGoogle
                         //MessageBox.Show("Reading <entrydata>", "xml", MessageBoxButtons.OK);
 
                         if (xmlReader.IsStartElement() && xmlReader.Name == "entrydata")
-                        {   // Read the Name attribute of <entrydata>
+                        {   
+                            // Read the Name attribute of <entrydata>
                             xmlReader.MoveToAttribute("name");
                             //MessageBox.Show("Reading attribute name", "xml", MessageBoxButtons.OK);
 
@@ -204,10 +205,15 @@ namespace NotesToGoogle
                                     sValue = xmlReader.Value;
                                     //MessageBox.Show("fullday " + sValue + " is " + sValue.Length.ToString(), "sValue", MessageBoxButtons.OK);
 
+                                    // Create the FullDateTime object used to set date
                                     fullDateTime = new DateTime(Convert.ToInt32(sValue.Substring(0, 4)),
                                         Convert.ToInt32(sValue.Substring(4, 2)), Convert.ToInt32(sValue.Substring(6, 2)),
                                         Convert.ToInt32(sValue.Substring(9, 2)), Convert.ToInt32(sValue.Substring(11, 2)),
-                                        Convert.ToInt32(sValue.Substring(13, 2)), DateTimeKind.Local);
+                                        Convert.ToInt32(sValue.Substring(13, 2)), DateTimeKind.Utc);
+
+                                    // We need to manimpulate the time using the last 3 digits of the time code sent making it the correct UTC time
+                                    fullDateTime = OffSetUTCTime(fullDateTime, sValue.Substring(18,3));
+
                                     break;
                                 // 144 - start date from datetime.value
                                 case STARTDATETIMEFIELD:
@@ -222,7 +228,10 @@ namespace NotesToGoogle
                                         startDateTime = new DateTime(Convert.ToInt32(sValue.Substring(0, 4)),
                                             Convert.ToInt32(sValue.Substring(4, 2)), Convert.ToInt32(sValue.Substring(6, 2)),
                                             Convert.ToInt32(sValue.Substring(9, 2)), Convert.ToInt32(sValue.Substring(11, 2)),
-                                            Convert.ToInt32(sValue.Substring(13, 2)), DateTimeKind.Local);
+                                            Convert.ToInt32(sValue.Substring(13, 2)), DateTimeKind.Utc);
+
+                                        // We need to manimpulate the time using the last 3 digits of the time code sent making it the correct UTC time
+                                        startDateTime = OffSetUTCTime(startDateTime, sValue.Substring(18, 3));
                                     }
                                     else
                                     {
@@ -242,7 +251,10 @@ namespace NotesToGoogle
                                         endDateTime = new DateTime(Convert.ToInt32(sValue.Substring(0, 4)),
                                             Convert.ToInt32(sValue.Substring(4, 2)), Convert.ToInt32(sValue.Substring(6, 2)),
                                             Convert.ToInt32(sValue.Substring(9, 2)), Convert.ToInt32(sValue.Substring(11, 2)),
-                                            Convert.ToInt32(sValue.Substring(13, 2)), DateTimeKind.Local);
+                                            Convert.ToInt32(sValue.Substring(13, 2)), DateTimeKind.Utc);
+
+                                        // We need to manimpulate the time using the last 3 digits of the time code sent making it the correct UTC time
+                                        endDateTime = OffSetUTCTime(endDateTime, sValue.Substring(18, 3));
                                     }
                                     else
                                     {
@@ -360,6 +372,38 @@ namespace NotesToGoogle
 
             xmlReader.Close();
             return events;
+        }
+
+        /// <summary>
+        /// This method is used to add or subtract the appropriate time values making the current time UTC correct
+        /// </summary>
+        /// <param name="current"></param>
+        /// <param name="UTCValue"></param>
+        /// <returns></returns>
+        private DateTime OffSetUTCTime(DateTime current, String UTCValue)
+        {
+            DateTime updated = current;
+
+            try
+            {
+                Int16 UTCHours = System.Convert.ToInt16(UTCValue.Substring(1, 2));
+                //Int16 UTCHours = System.Convert.ToInt16(UTCValue);
+
+                if (UTCValue.Contains('-'))
+                {
+                    updated = current.AddHours(UTCHours);
+                }
+                else
+                {
+                    updated = current.AddHours(-1 * UTCHours);
+                }
+            }
+            catch (FormatException fe)
+            {   
+
+            }
+            
+            return updated;
         }
 
         // Private Class Variables

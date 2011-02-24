@@ -203,42 +203,12 @@ namespace NotesToGoogle
         /// <param name="sender">Object taht sent the Load event</param>
         /// <param name="e">Event Arguments passed</param>
         private void NotesToGoogleForm_Load(object sender, EventArgs e)
-        {   /*
-            if (config.LoadPreferences())
-            {
-                // Update GUI with preference values
-                // Save Connection Variables
-                textBox_WebmailURL.Text = (config.GetPreference("WebmailURL") != "") ? config.GetPreference("WebmailURL") : "http://webmail.domain.com/mail/name.nsf";
-                textBox_NotesLogin.Text = config.GetPreference("NotesLogin");
-                textBox_NotesPassword.Text = config.GetPreference("NotesPassword");
-                textBox_GoogleLogin.Text = config.GetPreference("GoogleLogin");
-                textBox_GooglePassword.Text = config.GetPreference("GooglePassword");
-
-                // Save Preference Variables
-                checkBox_ConnectUsingSSL.Checked = (config.GetPreference("ConnectUsingSSL") != "") ? Convert.ToBoolean(config.GetPreference("ConnectUsingSSL")) : true;
-                checkBox_NotesServerAuth.Checked = (config.GetPreference("NotesServerAuth") != "") ? Convert.ToBoolean(config.GetPreference("NotesServerAuth")) : true;
-                checkBox_MinimizeToTray.Checked = (config.GetPreference("MinimizeToTray") != "") ? Convert.ToBoolean(config.GetPreference("MinimizeToTray")) : false;
-                radioButton_MainCalChoice.Checked = (config.GetPreference("MainCalChoice") != "") ? Convert.ToBoolean(config.GetPreference("MainCalChoice")) : true;
-                radioButton_OtherCalChoice.Checked = (config.GetPreference("OtherCalChoice") != "") ? Convert.ToBoolean(config.GetPreference("OtherCalChoice")) : false;
-                checkBox_CustomDaysAhead.Checked = (config.GetPreference("CustomDaysAhead") != "") ? Convert.ToBoolean(config.GetPreference("CustomDaysAhead")) : false;
-                checkBox_CreateNotification.Checked = (config.GetPreference("NotificationsOn") != "") ? Convert.ToBoolean(config.GetPreference("NotificationsOn")) : false;
-                textBox_CustomDaysAhead.Text = (config.GetPreference("DaysAhead") != "") ? config.GetPreference("DaysAhead") : "14";
-                textBox_OtherCalName.Text = (config.GetPreference("OtherCalName") != "") ? config.GetPreference("OtherCalName") : "Lotus.Notes";
-                checkBox_StartMinimized.Checked = (config.GetPreference("StartMinimized") != "") ? Convert.ToBoolean(config.GetPreference("StartMinimized")) : false;
-
-                // Save Schedule Variables
-                checkBox_SyncOnStartup.Checked = (config.GetPreference("SyncOnStartup") != "") ? Convert.ToBoolean(config.GetPreference("SyncOnStartup")) : false;
-                checkBox_ScheduleSync.Checked = (config.GetPreference("ScheduleSync") != "") ? Convert.ToBoolean(config.GetPreference("ScheduleSync")) : false;
-                textBox_ScheduleSync.Text = (config.GetPreference("ScheduleTime") != "") ? config.GetPreference("ScheduleTime") : "30";
-            }
-            else
-            {   // If there were errors, we need to post an error
-                PrintStringToDebug("Config Preferences did not load properly");
-            }*/
-
-            // Setup
+        {               
+            // Set the initial language to English then update the UI elements
             Thread.CurrentThread.CurrentUICulture = m_EnglishCulture;
-            UpdateUI();                 // Personal Components
+            
+            // Call the method to create and update all the GUI components
+            UpdateUI();                 
 
             // Sync on Startup if selected
             if (checkBox_SyncOnStartup.Checked)
@@ -255,8 +225,11 @@ namespace NotesToGoogle
         /// <param name="e">Parameters for the cancel event</param>
         private void FormClosingEventCancel_Closing(object sender, CancelEventArgs e)
         {
+            // Create the DialogResult object used to gather user input
             DialogResult result;
 
+            // Check to see if the Sync thread is running
+            // If so we need to ask for confirmation of closing before killing the thread
             if (backgroundWorker_SingleSync.IsBusy)
             {
                 result = MessageBox.Show("There is a sync job currently running; are you sure you'd like to quit?", "Job running", MessageBoxButtons.YesNo);
@@ -869,6 +842,7 @@ namespace NotesToGoogle
             this.checkBox_SyncOnStartup.TabIndex = 1;
             this.checkBox_SyncOnStartup.Text = "Sync on Startup";
             this.checkBox_SyncOnStartup.UseVisualStyleBackColor = true;
+            this.checkBox_SyncOnStartup.CheckedChanged += new System.EventHandler(this.checkBox_ScheduleSync_CheckedChanged);
             // 
             // textBox_ScheduleSync
             // 
@@ -1343,7 +1317,7 @@ namespace NotesToGoogle
         private void checkBox_ScheduleSync_CheckedChanged(object sender, EventArgs e)
         {
             textBox_ScheduleSync.Enabled = checkBox_ScheduleSync.Checked;
-            PrintStringToDebug("Please restart to change Schedule settings.");
+            PrintStringToDebug("Scheduled sync setting has changed.  Please restart application to take advantage of this update. \r\n Please ignore if you've just restarted.");
             //SetupAndStartScheduleSync();
         }
 
@@ -1550,6 +1524,7 @@ namespace NotesToGoogle
             {   // EventArg e contained an error
                 PrintStringToDebug("Error during sync: " + e.Error.Message);
                 progressBar_SyncProgress.ForeColor = Color.Red;
+                tabControl_MainControl.SelectedTab = tabPage_Debug;
             }
             else
             {

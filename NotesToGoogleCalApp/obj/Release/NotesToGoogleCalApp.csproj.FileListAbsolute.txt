@@ -34,5 +34,24 @@ C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToG
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Release\NotesToGoogleCal.exe
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Release\NotesToGoogleCal.pdb
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\bin\Release\Doc.xml
-D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\NotesToGoogleCal.exe.config
 D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\Doc.xml
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\Resources\NotesToGoogleLogo.jpg
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\ResolveAssemblyReference.cache
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\NotesToGoogle.NotesToGoogleForm.resources
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\NotesToGoogle.Properties.Resources.resources
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\NotesToGoogle.Localization.en-CA.resources
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\NotesToGoogle.Localization.fr-FR.resources
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\NotesToGoogleCalApp.csproj.GenerateResource.Cache
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\NotesToGoogleCalendar.exe.config
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\NotesToGoogleCalendar.exe.manifest
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\NotesToGoogleCalendar.application
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\NotesToGoogleCalendar.exe
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\NotesToGoogleCalendar.pdb
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\en-CA\NotesToGoogleCalendar.resources.dll
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\fr-FR\NotesToGoogleCalendar.resources.dll
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\en-CA\NotesToGoogleCalendar.resources.dll
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\fr-FR\NotesToGoogleCalendar.resources.dll
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\NotesToGoogleCalendar.exe.manifest
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\NotesToGoogleCalendar.application
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\NotesToGoogleCalendar.exe
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\NotesToGoogleCalendar.pdb

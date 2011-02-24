@@ -9,12 +9,16 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NotesToGoogle</RootNamespace>
-    <AssemblyName>NotesToGoogle</AssemblyName>
+    <AssemblyName>NotesToGoogleCalendar</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>NotesToGoogleIcon.ico</ApplicationIcon>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
+    <ManifestCertificateThumbprint>6B98CF512662FAC2662BB96D06FCAD46EF054358</ManifestCertificateThumbprint>
+    <ManifestKeyFile>NotesToGoogleCalApp_TemporaryKey.pfx</ManifestKeyFile>
+    <GenerateManifests>true</GenerateManifests>
+    <SignManifests>true</SignManifests>
+    <PublishUrl>D:\Development\iNotesToGoogle\Publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -24,9 +28,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -72,14 +77,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GoogleServiceConnect.cs" />
+    <Compile Include="Localization.en-CA.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Localization.en-CA.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Localization.fr-FR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Localization.fr-FR.resx</DependentUpon>
+    </Compile>
     <Compile Include="NotesServiceConnect.cs" />
     <Compile Include="NotesToGoogleApp.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="NotesToGoogleSync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Localization.en-CA.resx" />
-    <EmbeddedResource Include="Localization.fr-FR.resx" />
+    <EmbeddedResource Include="Localization.en-CA.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.en-CA.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Localization.fr-FR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.fr-FR.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="NotesToGoogleApp.resx">
       <DependentUpon>NotesToGoogleApp.cs</DependentUpon>
     </EmbeddedResource>
@@ -106,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="NotesToGoogleCalApp_TemporaryKey.pfx" />
     <None Include="Resources\NotesToGoogleLogo.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

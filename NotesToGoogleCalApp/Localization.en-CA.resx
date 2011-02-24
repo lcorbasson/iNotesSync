@@ -157,13 +157,13 @@
     <value>Sync On Startup</value>
   </data>
   <data name="label_About" xml:space="preserve">
-    <value>About</value>
+    <value>About:</value>
   </data>
   <data name="label_Author" xml:space="preserve">
-    <value>Author</value>
+    <value>Author:</value>
   </data>
   <data name="label_Date" xml:space="preserve">
-    <value>Date</value>
+    <value>Date:</value>
   </data>
   <data name="label_GoogleLogin" xml:space="preserve">
     <value>Google Login</value>
@@ -181,7 +181,7 @@
     <value>Status</value>
   </data>
   <data name="label_Version" xml:space="preserve">
-    <value>Version</value>
+    <value>Version:</value>
   </data>
   <data name="radioButton_English" xml:space="preserve">
     <value>English</value>

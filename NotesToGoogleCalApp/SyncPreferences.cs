@@ -18,7 +18,11 @@ namespace NotesToGoogle
         /// </summary>
         public SyncPreferences()
         {
-            // Initialize the storage data type(s)
+            // Setup the variables to point at the My Documents\*.Preference file
+            sPrefPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            sPrefFile = sPrefPath + "\\" + sPrefFile;
+
+            // Create the hash table used for caching settings
             htSyncPreferences = new Hashtable();
         }
 
@@ -153,6 +157,12 @@ namespace NotesToGoogle
             return _prefValue;
         }
 
+        /// <summary>
+        /// Method used to Encrypt strings using the supplied pass phrase
+        /// </summary>
+        /// <param name="Message">Text message to be encrypted</param>
+        /// <param name="Passphrase">Pass phrase used to encrypt the message</param>
+        /// <returns>The encrypted string</returns>
         public static string EncryptString(string Message, string Passphrase)
         {
             byte[] Results;
@@ -193,6 +203,12 @@ namespace NotesToGoogle
             return Convert.ToBase64String(Results);
         }
 
+        /// <summary>
+        /// Method used to decrypt a specified string of characters
+        /// </summary>
+        /// <param name="Message">The encrypted text message</param>
+        /// <param name="Passphrase">Pass phrase used to decrypt the message</param>
+        /// <returns>The decrypted text message</returns>
         public static string DecryptString(string Message, string Passphrase)
         {
             byte[] Results;
