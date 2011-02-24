@@ -56,15 +56,6 @@ namespace NotesToGoogle
 
                 csService = new CalendarService("NotesToGoogleApp");
 
-                /* Proxy stuff
-                requestFactory = (GDataRequestFactory)csService.RequestFactory;
-                iProxy = WebRequest.DefaultWebProxy;
-                myProxy = new WebProxy(iProxy.GetProxy(new Uri("http://www.google.com")));
-                myProxy.Credentials = CredentialCache.DefaultCredentials;
-                myProxy.UseDefaultCredentials = false;
-                requestFactory.Proxy = myProxy;
-                */
-
                 // Depending on the 
                 if (bUseSSL)
                 {
@@ -86,6 +77,15 @@ namespace NotesToGoogle
                 {
                     csService.setUserCredentials(sGoogleLogin, sGooglePassword);                    
                 }
+
+                // Setup any proxy information from Internet Explorer settings
+                // If this doesn't work, I'll have to add a check box for proxy usage
+                requestFactory = (GDataRequestFactory)csService.RequestFactory;
+                iProxy = WebRequest.DefaultWebProxy;
+                myProxy = new WebProxy(iProxy.GetProxy(new Uri(sOwnerCalURI)));
+                myProxy.Credentials = CredentialCache.DefaultCredentials;
+                myProxy.UseDefaultCredentials = true;
+                requestFactory.Proxy = myProxy;
             }
             catch (ServiceUnavailableException e)
             {

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>NotesToGoogle</name>
+        <name>NotesToGoogleCalendar</name>
     </assembly>
     <members>
         <member name="T:NotesToGoogle.NotesToGoogleSync">
@@ -34,6 +34,14 @@
             </summary>
             <param name="_stream">XML stream passed in to create XMLTextReader</param>
             <returns>List of EventEntry objects</returns>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleSync.OffSetUTCTime(System.DateTime,System.String)">
+            <summary>
+            This method is used to add or subtract the appropriate time values making the current time UTC correct
+            </summary>
+            <param name="current"></param>
+            <param name="UTCValue"></param>
+            <returns></returns>
         </member>
         <member name="P:NotesToGoogle.NotesToGoogleSync.GoogleService">
             <summary>
@@ -423,6 +431,22 @@
             </summary>
             <param name="_prefName">Preference name to return value of</param>
             <returns>String value of preference</returns>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.EncryptString(System.String,System.String)">
+            <summary>
+            Method used to Encrypt strings using the supplied pass phrase
+            </summary>
+            <param name="Message">Text message to be encrypted</param>
+            <param name="Passphrase">Pass phrase used to encrypt the message</param>
+            <returns>The encrypted string</returns>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.DecryptString(System.String,System.String)">
+            <summary>
+            Method used to decrypt a specified string of characters
+            </summary>
+            <param name="Message">The encrypted text message</param>
+            <param name="Passphrase">Pass phrase used to decrypt the message</param>
+            <returns>The decrypted text message</returns>
         </member>
         <member name="T:NotesToGoogle.GoogleServiceConnect">
             <summary>
