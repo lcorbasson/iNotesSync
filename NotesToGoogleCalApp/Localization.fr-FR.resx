@@ -178,7 +178,7 @@
     <value>Notes Password</value>
   </data>
   <data name="label_Status" xml:space="preserve">
-    <value>Statut</value>
+    <value>Sync Statut:</value>
   </data>
   <data name="label_Version" xml:space="preserve">
     <value>Version:</value>

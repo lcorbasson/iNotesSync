@@ -55,3 +55,7 @@ D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Debug\NotesToGoogleCalenda
 D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Debug\NotesToGoogleCalendar.application
 D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Debug\NotesToGoogleCalendar.exe
 D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Debug\NotesToGoogleCalendar.pdb
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Debug\Google.GData.AccessControl.dll
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Debug\Google.GData.Calendar.dll
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Debug\Google.GData.Client.dll
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Debug\Google.GData.Extensions.dll
