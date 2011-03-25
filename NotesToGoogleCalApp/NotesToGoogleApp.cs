@@ -344,6 +344,7 @@ namespace NotesToGoogle
             this.checkBox_MinimizeToTray = new System.Windows.Forms.CheckBox();
             this.button_CreateService = new System.Windows.Forms.Button();
             this.groupBox_LotusNotes = new System.Windows.Forms.GroupBox();
+            this.label_NotesLoginDesc = new System.Windows.Forms.Label();
             this.checkBox_NotesServerAuth = new System.Windows.Forms.CheckBox();
             this.checkBox_CustomDaysAhead = new System.Windows.Forms.CheckBox();
             this.textBox_CustomDaysAhead = new System.Windows.Forms.TextBox();
@@ -479,7 +480,7 @@ namespace NotesToGoogle
             // 
             this.textBox_GoogleLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_GoogleLogin.Location = new System.Drawing.Point(139, 21);
-            this.textBox_GoogleLogin.MaxLength = 80;
+            this.textBox_GoogleLogin.MaxLength = 150;
             this.textBox_GoogleLogin.Name = "textBox_GoogleLogin";
             this.textBox_GoogleLogin.Size = new System.Drawing.Size(177, 21);
             this.textBox_GoogleLogin.TabIndex = 10;
@@ -515,7 +516,7 @@ namespace NotesToGoogle
             this.textBox_WebmailURL.BackColor = System.Drawing.SystemColors.Window;
             this.textBox_WebmailURL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_WebmailURL.Location = new System.Drawing.Point(139, 24);
-            this.textBox_WebmailURL.MaxLength = 100;
+            this.textBox_WebmailURL.MaxLength = 200;
             this.textBox_WebmailURL.Name = "textBox_WebmailURL";
             this.textBox_WebmailURL.Size = new System.Drawing.Size(336, 21);
             this.textBox_WebmailURL.TabIndex = 7;
@@ -544,7 +545,7 @@ namespace NotesToGoogle
             // 
             this.textBox_NotesLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_NotesLogin.Location = new System.Drawing.Point(139, 54);
-            this.textBox_NotesLogin.MaxLength = 80;
+            this.textBox_NotesLogin.MaxLength = 150;
             this.textBox_NotesLogin.Name = "textBox_NotesLogin";
             this.textBox_NotesLogin.Size = new System.Drawing.Size(177, 21);
             this.textBox_NotesLogin.TabIndex = 8;
@@ -660,6 +661,7 @@ namespace NotesToGoogle
             // 
             // groupBox_LotusNotes
             // 
+            this.groupBox_LotusNotes.Controls.Add(this.label_NotesLoginDesc);
             this.groupBox_LotusNotes.Controls.Add(this.checkBox_NotesServerAuth);
             this.groupBox_LotusNotes.Controls.Add(this.checkBox_CustomDaysAhead);
             this.groupBox_LotusNotes.Controls.Add(this.textBox_CustomDaysAhead);
@@ -670,6 +672,16 @@ namespace NotesToGoogle
             this.groupBox_LotusNotes.TabIndex = 18;
             this.groupBox_LotusNotes.TabStop = false;
             this.groupBox_LotusNotes.Text = " Lotus Notes ";
+            // 
+            // label_NotesLoginDesc
+            // 
+            this.label_NotesLoginDesc.AutoSize = true;
+            this.label_NotesLoginDesc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_NotesLoginDesc.Location = new System.Drawing.Point(166, 30);
+            this.label_NotesLoginDesc.Name = "label_NotesLoginDesc";
+            this.label_NotesLoginDesc.Size = new System.Drawing.Size(258, 15);
+            this.label_NotesLoginDesc.TabIndex = 11;
+            this.label_NotesLoginDesc.Text = "(Check, only if webmail uses web based login)";
             // 
             // checkBox_NotesServerAuth
             // 
@@ -995,9 +1007,9 @@ namespace NotesToGoogle
             // 
             // progressBar_SyncProgress
             // 
-            this.progressBar_SyncProgress.Location = new System.Drawing.Point(74, 4);
+            this.progressBar_SyncProgress.Location = new System.Drawing.Point(84, 0);
             this.progressBar_SyncProgress.Name = "progressBar_SyncProgress";
-            this.progressBar_SyncProgress.Size = new System.Drawing.Size(227, 16);
+            this.progressBar_SyncProgress.Size = new System.Drawing.Size(228, 23);
             this.progressBar_SyncProgress.Step = 5;
             this.progressBar_SyncProgress.TabIndex = 1;
             this.progressBar_SyncProgress.Tag = "";
@@ -1005,9 +1017,10 @@ namespace NotesToGoogle
             // label_Status
             // 
             this.label_Status.AutoSize = true;
+            this.label_Status.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Status.Location = new System.Drawing.Point(3, 5);
             this.label_Status.Name = "label_Status";
-            this.label_Status.Size = new System.Drawing.Size(64, 13);
+            this.label_Status.Size = new System.Drawing.Size(75, 13);
             this.label_Status.TabIndex = 0;
             this.label_Status.Text = "Sync Status";
             // 
@@ -1216,6 +1229,7 @@ namespace NotesToGoogle
         private GroupBox groupBox_Sync;
         private BackgroundWorker backgroundWorker_Schedule;
         private System.Windows.Forms.Timer timer_Schedule;
+        private Label label_NotesLoginDesc;
         
 
         /// <summary>

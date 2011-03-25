@@ -34,7 +34,6 @@ C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToG
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Release\NotesToGoogleCal.exe
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\obj\Release\NotesToGoogleCal.pdb
 C:\Documents and Settings\kend\My Documents\Visual Studio 2008\Projects\NotesToGoogleCalAppSvn\NotesToGoogleCalApp\bin\Release\Doc.xml
-D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\Doc.xml
 D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\Resources\NotesToGoogleLogo.jpg
 D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\ResolveAssemblyReference.cache
 D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\NotesToGoogle.NotesToGoogleForm.resources
@@ -55,3 +54,8 @@ D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\NotesToGoogleCalen
 D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\NotesToGoogleCalendar.application
 D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\NotesToGoogleCalendar.exe
 D:\Development\iNotesToGoogle\NotesToGoogleCalApp\obj\Release\NotesToGoogleCalendar.pdb
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\Doc.xml
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\Google.GData.AccessControl.dll
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\Google.GData.Calendar.dll
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\Google.GData.Client.dll
+D:\Development\iNotesToGoogle\NotesToGoogleCalApp\bin\Release\Google.GData.Extensions.dll
