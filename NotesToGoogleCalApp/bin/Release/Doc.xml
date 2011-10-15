@@ -1,56 +1,23 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>NotesToGoogleCalendar</name>
+        <name>NotesToGoogleSync</name>
     </assembly>
     <members>
-        <member name="T:NotesToGoogle.NotesToGoogleSync">
+        <member name="T:NotesToGoogle.Properties.Resources">
             <summary>
-            NotesToGoogleSync class extends the Thread class.  It is run as an extra thread and is responsible
-            for the actual syncing between Notes and Google.
+              A strongly-typed resource class, for looking up localized strings, etc.
             </summary>
         </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.#ctor">
+        <member name="P:NotesToGoogle.Properties.Resources.ResourceManager">
             <summary>
-            Constructor with no parameters
+              Returns the cached ResourceManager instance used by this class.
             </summary>
         </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.#ctor(NotesToGoogle.GoogleServiceConnect,NotesToGoogle.NotesServiceConnect)">
+        <member name="P:NotesToGoogle.Properties.Resources.Culture">
             <summary>
-            Constructor with GoogleServiceConnect and NotesServiceConnect parameters
-            </summary>
-            <param name="_googleService">Object representing the googleServiceConnector</param>
-            <param name="_notesService">Object representing the notesServiceConnector</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.Sync(System.ComponentModel.BackgroundWorker,System.ComponentModel.DoWorkEventArgs)">
-            <summary>
-            Method called to initiate the sync process.
-            </summary>
-            <returns>Returns the success value</returns>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.ConvertXMLtoEvents(System.IO.StreamReader)">
-            <summary>
-            Method returns a list of EventEntries to be input into GoogleService
-            </summary>
-            <param name="_stream">XML stream passed in to create XMLTextReader</param>
-            <returns>List of EventEntry objects</returns>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.OffSetUTCTime(System.DateTime,System.String)">
-            <summary>
-            This method is used to add or subtract the appropriate time values making the current time UTC correct
-            </summary>
-            <param name="current"></param>
-            <param name="UTCValue"></param>
-            <returns></returns>
-        </member>
-        <member name="P:NotesToGoogle.NotesToGoogleSync.GoogleService">
-            <summary>
-            Accessor method for GoogleService
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.NotesToGoogleSync.NotesService">
-            <summary>
-            Accessor method for NotesService
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
             </summary>
         </member>
         <member name="T:NotesToGoogle.NotesServiceConnect">
@@ -402,51 +369,54 @@
              Setup user variables for language localization
             
         </member>
-        <member name="M:NotesToGoogle.SyncPreferences.#ctor">
+        <member name="T:NotesToGoogle.NotesToGoogleSync">
             <summary>
-            Class constructor for SyncPreferences class.
-            This class is used to save and retrieve the user preferences from file.
+            NotesToGoogleSync class extends the Thread class.  It is run as an extra thread and is responsible
+            for the actual syncing between Notes and Google.
             </summary>
         </member>
-        <member name="M:NotesToGoogle.SyncPreferences.SavePreferences">
+        <member name="M:NotesToGoogle.NotesToGoogleSync.#ctor">
             <summary>
-            Method used to save / write preferences to file
+            Constructor with no parameters
             </summary>
         </member>
-        <member name="M:NotesToGoogle.SyncPreferences.LoadPreferences">
+        <member name="M:NotesToGoogle.NotesToGoogleSync.#ctor(NotesToGoogle.GoogleServiceConnect,NotesToGoogle.NotesServiceConnect)">
             <summary>
-            Method used to load / read preferences from file
+            Constructor with GoogleServiceConnect and NotesServiceConnect parameters
+            </summary>
+            <param name="_googleService">Object representing the googleServiceConnector</param>
+            <param name="_notesService">Object representing the notesServiceConnector</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleSync.Sync(System.ComponentModel.BackgroundWorker,System.ComponentModel.DoWorkEventArgs)">
+            <summary>
+            Method called to initiate the sync process.
+            </summary>
+            <returns>Returns the success value</returns>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleSync.ConvertXMLtoEvents(System.IO.StreamReader)">
+            <summary>
+            Method returns a list of EventEntries to be input into GoogleService
+            </summary>
+            <param name="_stream">XML stream passed in to create XMLTextReader</param>
+            <returns>List of EventEntry objects</returns>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleSync.OffSetUTCTime(System.DateTime,System.String)">
+            <summary>
+            This method is used to add or subtract the appropriate time values making the current time UTC correct
+            </summary>
+            <param name="current"></param>
+            <param name="UTCValue"></param>
+            <returns></returns>
+        </member>
+        <member name="P:NotesToGoogle.NotesToGoogleSync.GoogleService">
+            <summary>
+            Accessor method for GoogleService
             </summary>
         </member>
-        <member name="M:NotesToGoogle.SyncPreferences.SetPreference(System.String,System.String)">
+        <member name="P:NotesToGoogle.NotesToGoogleSync.NotesService">
             <summary>
-            Method used to set preference values
+            Accessor method for NotesService
             </summary>
-            <param name="_prefName">Preference Name to store</param>
-            <param name="_prefValue">Preference Value to store</param>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.GetPreference(System.String)">
-            <summary>
-            Method used to retrieve preference value
-            </summary>
-            <param name="_prefName">Preference name to return value of</param>
-            <returns>String value of preference</returns>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.EncryptString(System.String,System.String)">
-            <summary>
-            Method used to Encrypt strings using the supplied pass phrase
-            </summary>
-            <param name="Message">Text message to be encrypted</param>
-            <param name="Passphrase">Pass phrase used to encrypt the message</param>
-            <returns>The encrypted string</returns>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.DecryptString(System.String,System.String)">
-            <summary>
-            Method used to decrypt a specified string of characters
-            </summary>
-            <param name="Message">The encrypted text message</param>
-            <param name="Passphrase">Pass phrase used to decrypt the message</param>
-            <returns>The decrypted text message</returns>
         </member>
         <member name="T:NotesToGoogle.GoogleServiceConnect">
             <summary>
@@ -597,21 +567,51 @@
             Accessor method for Days ahead information
             </summary>
         </member>
-        <member name="T:NotesToGoogle.Properties.Resources">
+        <member name="M:NotesToGoogle.SyncPreferences.#ctor">
             <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
+            Class constructor for SyncPreferences class.
+            This class is used to save and retrieve the user preferences from file.
             </summary>
         </member>
-        <member name="P:NotesToGoogle.Properties.Resources.ResourceManager">
+        <member name="M:NotesToGoogle.SyncPreferences.SavePreferences">
             <summary>
-              Returns the cached ResourceManager instance used by this class.
+            Method used to save / write preferences to file
             </summary>
         </member>
-        <member name="P:NotesToGoogle.Properties.Resources.Culture">
+        <member name="M:NotesToGoogle.SyncPreferences.LoadPreferences">
             <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
+            Method used to load / read preferences from file
             </summary>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.SetPreference(System.String,System.String)">
+            <summary>
+            Method used to set preference values
+            </summary>
+            <param name="_prefName">Preference Name to store</param>
+            <param name="_prefValue">Preference Value to store</param>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.GetPreference(System.String)">
+            <summary>
+            Method used to retrieve preference value
+            </summary>
+            <param name="_prefName">Preference name to return value of</param>
+            <returns>String value of preference</returns>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.EncryptString(System.String,System.String)">
+            <summary>
+            Method used to Encrypt strings using the supplied pass phrase
+            </summary>
+            <param name="Message">Text message to be encrypted</param>
+            <param name="Passphrase">Pass phrase used to encrypt the message</param>
+            <returns>The encrypted string</returns>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.DecryptString(System.String,System.String)">
+            <summary>
+            Method used to decrypt a specified string of characters
+            </summary>
+            <param name="Message">The encrypted text message</param>
+            <param name="Passphrase">Pass phrase used to decrypt the message</param>
+            <returns>The decrypted text message</returns>
         </member>
     </members>
 </doc>
