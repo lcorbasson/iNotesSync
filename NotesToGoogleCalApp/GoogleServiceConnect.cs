@@ -183,7 +183,7 @@ namespace NotesToGoogle
                 query = new EventQuery(GetAlternateURL(calToSearch));
                 query.Query = _searchText;
                 query.StartTime = new DateTime(today.Year, today.Month, today.Day);
-                    today = today.AddDays(iDaysAhead);
+                    today = today.AddDays(iDaysAhead+1);
                 query.EndTime = new DateTime(today.Year, today.Month, today.Day);
 
                 //requestFactory.CreateRequest(GDataRequestType.Query, query.Uri);
