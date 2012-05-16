@@ -4,6 +4,52 @@
         <name>NotesToGoogleSync</name>
     </assembly>
     <members>
+        <member name="M:NotesToGoogle.SyncPreferences.#ctor">
+            <summary>
+            Class constructor for SyncPreferences class.
+            This class is used to save and retrieve the user preferences from file.
+            </summary>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.SavePreferences">
+            <summary>
+            Method used to save / write preferences to file
+            </summary>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.LoadPreferences">
+            <summary>
+            Method used to load / read preferences from file
+            </summary>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.SetPreference(System.String,System.String)">
+            <summary>
+            Method used to set preference values
+            </summary>
+            <param name="_prefName">Preference Name to store</param>
+            <param name="_prefValue">Preference Value to store</param>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.GetPreference(System.String)">
+            <summary>
+            Method used to retrieve preference value
+            </summary>
+            <param name="_prefName">Preference name to return value of</param>
+            <returns>String value of preference</returns>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.EncryptString(System.String,System.String)">
+            <summary>
+            Method used to Encrypt strings using the supplied pass phrase
+            </summary>
+            <param name="Message">Text message to be encrypted</param>
+            <param name="Passphrase">Pass phrase used to encrypt the message</param>
+            <returns>The encrypted string</returns>
+        </member>
+        <member name="M:NotesToGoogle.SyncPreferences.DecryptString(System.String,System.String)">
+            <summary>
+            Method used to decrypt a specified string of characters
+            </summary>
+            <param name="Message">The encrypted text message</param>
+            <param name="Passphrase">Pass phrase used to decrypt the message</param>
+            <returns>The decrypted text message</returns>
+        </member>
         <member name="T:NotesToGoogle.Properties.Resources">
             <summary>
               A strongly-typed resource class, for looking up localized strings, etc.
@@ -108,6 +154,205 @@
         <member name="P:NotesToGoogle.NotesServiceConnect.LastError">
             <summary>
             set get for last error
+            </summary>
+        </member>
+        <member name="T:NotesToGoogle.GoogleServiceConnect">
+            <summary>
+            The GoogleServiceConnect class is used to make connections to google calendar; it can be used to:
+            view, add, delete, update calendars and calendar entries
+            </summary>
+        </member>
+        <member name="M:NotesToGoogle.GoogleServiceConnect.#ctor(System.String,System.String)">
+            <summary>
+            Creates GoogleServiceConnect object, chained to constructor.
+            </summary>
+            <param name="_GoogleLogin">Supplies Google Login / Default calender</param>
+            <param name="_GooglePassword">Supplies Google Password</param>
+        </member>
+        <member name="M:NotesToGoogle.GoogleServiceConnect.#ctor(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates GoogleServiceConnect object, chained to constructor.
+            </summary>
+            <param name="_GoogleLogin">Supplies Google Login / Default calendar</param>
+            <param name="_GooglePassword">Supplies Google password</param>
+            <param name="_UseSSL">Supplies Use SSL Switch</param>
+        </member>
+        <member name="M:NotesToGoogle.GoogleServiceConnect.#ctor(System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Creates GoogleServiceConnect object.
+            </summary>
+            <param name="_GoogleLogin">Supplies Google Login / Default calendar</param>
+            <param name="_GooglePassword">Supplies Google Password</param>
+            <param name="_UseSSL">Supplies Use SSL Switch</param>
+            <param name="_notifications">Supplies notification switch</param>
+        </member>
+        <member name="M:NotesToGoogle.GoogleServiceConnect.CreateCalendar(System.String)">
+            <summary>
+            CreateCalendar is used to create a new calendar to the owners profile.
+            </summary>
+            <param name="_calendarName">Name of the new calendar</param>
+            <returns>CalendarEntry object of the new calendar</returns>
+        </member>
+        <member name="M:NotesToGoogle.GoogleServiceConnect.DeleteCalendar(System.String)">
+            <summary>
+            Deletes a calendar with the specified name.
+            </summary>
+            <param name="_calendarName">Calendar name to delete</param>
+            <returns>Boolean whether calendar was deleted</returns>
+        </member>
+        <member name="M:NotesToGoogle.GoogleServiceConnect.ClearEventEntriesBySearch(System.String,System.String)">
+            <summary>
+            Method used to clear out all Lotus Notes specific entries; Lotus notes specific entries are 
+            denoted by a NL: in the subject field.  Calendar entries will only be deleted if they contain
+            the string 'Created from [LNotes]'; so when creating new entries FROM Lotus ensure that this
+            string is somewhere within the data.
+            </summary>
+            <param name="_calendar">Calendar name to search for</param>
+            <param name="_searchText">String to search entries for to delete</param>
+            <returns>Number of entries deleted</returns>
+        </member>
+        <member name="M:NotesToGoogle.GoogleServiceConnect.ClearEventEntriesBySearch(System.String)">
+            <summary>
+            Method used to clear out all Lotus Notes specific entries; Lotus notes specific entries are 
+            denoted by a NL: in the subject field.  Calendar entries will only be deleted if they contain
+            the string 'Created from [LNotes]'; so when creating new entries FROM Lotus ensure that this
+            string is somewhere within the data.
+            </summary>
+            <param name="_searchText">Search string to choose entries to delete</param>
+            <returns>Number of events deleted</returns>
+        </member>
+        <member name="M:NotesToGoogle.GoogleServiceConnect.BatchAddEvents(Google.GData.Calendar.CalendarEntry,System.Collections.Generic.List{Google.GData.Calendar.EventEntry})">
+            <summary>
+            Method used to add a number of events to 
+            </summary>
+            <param name="_calendar">Calendar to insert entries into</param>
+            <param name="events">List of evententries to add</param>
+            <returns>Whether or not the batch add worked properly</returns>
+        </member>
+        <member name="M:NotesToGoogle.GoogleServiceConnect.GetCalendarByName(System.String)">
+            <summary>
+            Returns the calendar entry object by the specified name
+            </summary>
+            <param name="_calendarName">Name of calendar to return</param>
+            <returns>Calendar with specified name</returns>
+        </member>
+        <member name="M:NotesToGoogle.GoogleServiceConnect.TestConnection">
+            <summary>
+            Test the connection to the GoogleService
+            </summary>
+            <returns>returns True for success, false for failure</returns>
+        </member>
+        <member name="M:NotesToGoogle.GoogleServiceConnect.GetAlternateURL(Google.GData.Calendar.CalendarEntry)">
+            <summary>
+            Method used to return the Alternate Link string value.  This URL is required when doing
+            any type of searching.
+            </summary>
+            <param name="_calToSearch">CalendarEntry to return alternate link for.</param>
+            <returns>Alternate link URL as string.</returns>
+        </member>
+        <member name="M:NotesToGoogle.GoogleServiceConnect.InsertEventTo(System.String,Google.GData.Calendar.EventEntry)">
+            <summary>
+            Method used to insert a calendar entry into the specified calendar.
+            </summary>
+            <param name="_toAdd">Event Entry to add to calendar</param>
+            <param name="_calendarName">Calendar name to insert event into</param>
+        </member>
+        <member name="M:NotesToGoogle.GoogleServiceConnect.InsertEvent(Google.GData.Calendar.EventEntry)">
+            <summary>
+            Method used to insert a calendar entry into the specified calendar.
+            </summary>
+            <param name="_toAdd">Event Entry to add to calendar</param>
+        </member>
+        <member name="P:NotesToGoogle.GoogleServiceConnect.StartDate">
+            <summary>
+            Get / Set method for the private dtStartDate variable
+            GoogleServiceConnect.StartDate = value to set
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.GoogleServiceConnect.EndDate">
+            <summary>
+            Get / Set accessor method for the dtEndDate private variable
+            GoogleServiceConnect.EndDate = value to set
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.GoogleServiceConnect.Login">
+            <summary>
+            Accessor method for Google Login
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.GoogleServiceConnect.Password">
+            <summary>
+            Accessor method for Google password
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.GoogleServiceConnect.Calendar">
+            <summary>
+            Accessor method for Google password
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.GoogleServiceConnect.UseSSL">
+            <summary>
+            Accessor method for UseSSl
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.GoogleServiceConnect.Notifications">
+            <summary>
+            Accessor method for Notifications
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.GoogleServiceConnect.DaysAhead">
+            <summary>
+            Accessor method for Days ahead information
+            </summary>
+        </member>
+        <member name="T:NotesToGoogle.NotesToGoogleSync">
+            <summary>
+            NotesToGoogleSync class extends the Thread class.  It is run as an extra thread and is responsible
+            for the actual syncing between Notes and Google.
+            </summary>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleSync.#ctor">
+            <summary>
+            Constructor with no parameters
+            </summary>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleSync.#ctor(NotesToGoogle.GoogleServiceConnect,NotesToGoogle.NotesServiceConnect)">
+            <summary>
+            Constructor with GoogleServiceConnect and NotesServiceConnect parameters
+            </summary>
+            <param name="_googleService">Object representing the googleServiceConnector</param>
+            <param name="_notesService">Object representing the notesServiceConnector</param>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleSync.Sync(System.ComponentModel.BackgroundWorker,System.ComponentModel.DoWorkEventArgs)">
+             <summary>
+             Method called to initiate the sync process.
+             </summary>
+             <returns>Returns the success value</returns>
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()] 
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleSync.ConvertXMLtoEvents(System.IO.StreamReader)">
+            <summary>
+            Method returns a list of EventEntries to be input into GoogleService
+            </summary>
+            <param name="_stream">XML stream passed in to create XMLTextReader</param>
+            <returns>List of EventEntry objects</returns>
+        </member>
+        <member name="M:NotesToGoogle.NotesToGoogleSync.OffSetUTCTime(System.DateTime,System.String)">
+            <summary>
+            This method is used to add or subtract the appropriate time values making the current time UTC correct
+            </summary>
+            <param name="current"></param>
+            <param name="UTCValue"></param>
+            <returns></returns>
+        </member>
+        <member name="P:NotesToGoogle.NotesToGoogleSync.GoogleService">
+            <summary>
+            Accessor method for GoogleService
+            </summary>
+        </member>
+        <member name="P:NotesToGoogle.NotesToGoogleSync.NotesService">
+            <summary>
+            Accessor method for NotesService
             </summary>
         </member>
         <member name="T:NotesToGoogle.NotesToGoogleForm">
@@ -357,261 +602,18 @@
             <param name="e"></param>
         </member>
         <member name="M:NotesToGoogle.NotesToGoogleForm.DoTheWork(System.Object,System.ComponentModel.DoWorkEventArgs)">
-            <summary>
-            DoWork method for Background workers, method must not attempt to touch the UI, we use Progress
-            Changed for that.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
+             <summary>
+             DoWork method for Background workers, method must not attempt to touch the UI, we use Progress
+             Changed for that.
+             </summary>
+             <param name="sender"></param>
+             <param name="e"></param>
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()] 
         </member>
         <member name="F:NotesToGoogle.NotesToGoogleForm.m_ResourceManager">
             
              Setup user variables for language localization
             
-        </member>
-        <member name="T:NotesToGoogle.NotesToGoogleSync">
-            <summary>
-            NotesToGoogleSync class extends the Thread class.  It is run as an extra thread and is responsible
-            for the actual syncing between Notes and Google.
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.#ctor">
-            <summary>
-            Constructor with no parameters
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.#ctor(NotesToGoogle.GoogleServiceConnect,NotesToGoogle.NotesServiceConnect)">
-            <summary>
-            Constructor with GoogleServiceConnect and NotesServiceConnect parameters
-            </summary>
-            <param name="_googleService">Object representing the googleServiceConnector</param>
-            <param name="_notesService">Object representing the notesServiceConnector</param>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.Sync(System.ComponentModel.BackgroundWorker,System.ComponentModel.DoWorkEventArgs)">
-            <summary>
-            Method called to initiate the sync process.
-            </summary>
-            <returns>Returns the success value</returns>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.ConvertXMLtoEvents(System.IO.StreamReader)">
-            <summary>
-            Method returns a list of EventEntries to be input into GoogleService
-            </summary>
-            <param name="_stream">XML stream passed in to create XMLTextReader</param>
-            <returns>List of EventEntry objects</returns>
-        </member>
-        <member name="M:NotesToGoogle.NotesToGoogleSync.OffSetUTCTime(System.DateTime,System.String)">
-            <summary>
-            This method is used to add or subtract the appropriate time values making the current time UTC correct
-            </summary>
-            <param name="current"></param>
-            <param name="UTCValue"></param>
-            <returns></returns>
-        </member>
-        <member name="P:NotesToGoogle.NotesToGoogleSync.GoogleService">
-            <summary>
-            Accessor method for GoogleService
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.NotesToGoogleSync.NotesService">
-            <summary>
-            Accessor method for NotesService
-            </summary>
-        </member>
-        <member name="T:NotesToGoogle.GoogleServiceConnect">
-            <summary>
-            The GoogleServiceConnect class is used to make connections to google calendar; it can be used to:
-            view, add, delete, update calendars and calendar entries
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.GoogleServiceConnect.#ctor(System.String,System.String)">
-            <summary>
-            Creates GoogleServiceConnect object, chained to constructor.
-            </summary>
-            <param name="_GoogleLogin">Supplies Google Login / Default calender</param>
-            <param name="_GooglePassword">Supplies Google Password</param>
-        </member>
-        <member name="M:NotesToGoogle.GoogleServiceConnect.#ctor(System.String,System.String,System.Boolean)">
-            <summary>
-            Creates GoogleServiceConnect object, chained to constructor.
-            </summary>
-            <param name="_GoogleLogin">Supplies Google Login / Default calendar</param>
-            <param name="_GooglePassword">Supplies Google password</param>
-            <param name="_UseSSL">Supplies Use SSL Switch</param>
-        </member>
-        <member name="M:NotesToGoogle.GoogleServiceConnect.#ctor(System.String,System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Creates GoogleServiceConnect object.
-            </summary>
-            <param name="_GoogleLogin">Supplies Google Login / Default calendar</param>
-            <param name="_GooglePassword">Supplies Google Password</param>
-            <param name="_UseSSL">Supplies Use SSL Switch</param>
-            <param name="_notifications">Supplies notification switch</param>
-        </member>
-        <member name="M:NotesToGoogle.GoogleServiceConnect.CreateCalendar(System.String)">
-            <summary>
-            CreateCalendar is used to create a new calendar to the owners profile.
-            </summary>
-            <param name="_calendarName">Name of the new calendar</param>
-            <returns>CalendarEntry object of the new calendar</returns>
-        </member>
-        <member name="M:NotesToGoogle.GoogleServiceConnect.DeleteCalendar(System.String)">
-            <summary>
-            Deletes a calendar with the specified name.
-            </summary>
-            <param name="_calendarName">Calendar name to delete</param>
-            <returns>Boolean whether calendar was deleted</returns>
-        </member>
-        <member name="M:NotesToGoogle.GoogleServiceConnect.ClearEventEntriesBySearch(System.String,System.String)">
-            <summary>
-            Method used to clear out all Lotus Notes specific entries; Lotus notes specific entries are 
-            denoted by a NL: in the subject field.  Calendar entries will only be deleted if they contain
-            the string 'Created from [LNotes]'; so when creating new entries FROM Lotus ensure that this
-            string is somewhere within the data.
-            </summary>
-            <param name="_calendar">Calendar name to search for</param>
-            <param name="_searchText">String to search entries for to delete</param>
-            <returns>Number of entries deleted</returns>
-        </member>
-        <member name="M:NotesToGoogle.GoogleServiceConnect.ClearEventEntriesBySearch(System.String)">
-            <summary>
-            Method used to clear out all Lotus Notes specific entries; Lotus notes specific entries are 
-            denoted by a NL: in the subject field.  Calendar entries will only be deleted if they contain
-            the string 'Created from [LNotes]'; so when creating new entries FROM Lotus ensure that this
-            string is somewhere within the data.
-            </summary>
-            <param name="_searchText">Search string to choose entries to delete</param>
-            <returns>Number of events deleted</returns>
-        </member>
-        <member name="M:NotesToGoogle.GoogleServiceConnect.BatchAddEvents(Google.GData.Calendar.CalendarEntry,System.Collections.Generic.List{Google.GData.Calendar.EventEntry})">
-            <summary>
-            Method used to add a number of events to 
-            </summary>
-            <param name="_calendar">Calendar to insert entries into</param>
-            <param name="events">List of evententries to add</param>
-            <returns>Whether or not the batch add worked properly</returns>
-        </member>
-        <member name="M:NotesToGoogle.GoogleServiceConnect.GetCalendarByName(System.String)">
-            <summary>
-            Returns the calendar entry object by the specified name
-            </summary>
-            <param name="_calendarName">Name of calendar to return</param>
-            <returns>Calendar with specified name</returns>
-        </member>
-        <member name="M:NotesToGoogle.GoogleServiceConnect.TestConnection">
-            <summary>
-            Test the connection to the GoogleService
-            </summary>
-            <returns>returns True for success, false for failure</returns>
-        </member>
-        <member name="M:NotesToGoogle.GoogleServiceConnect.GetAlternateURL(Google.GData.Calendar.CalendarEntry)">
-            <summary>
-            Method used to return the Alternate Link string value.  This URL is required when doing
-            any type of searching.
-            </summary>
-            <param name="_calToSearch">CalendarEntry to return alternate link for.</param>
-            <returns>Alternate link URL as string.</returns>
-        </member>
-        <member name="M:NotesToGoogle.GoogleServiceConnect.InsertEventTo(System.String,Google.GData.Calendar.EventEntry)">
-            <summary>
-            Method used to insert a calendar entry into the specified calendar.
-            </summary>
-            <param name="_toAdd">Event Entry to add to calendar</param>
-            <param name="_calendarName">Calendar name to insert event into</param>
-        </member>
-        <member name="M:NotesToGoogle.GoogleServiceConnect.InsertEvent(Google.GData.Calendar.EventEntry)">
-            <summary>
-            Method used to insert a calendar entry into the specified calendar.
-            </summary>
-            <param name="_toAdd">Event Entry to add to calendar</param>
-        </member>
-        <member name="P:NotesToGoogle.GoogleServiceConnect.StartDate">
-            <summary>
-            Get / Set method for the private dtStartDate variable
-            GoogleServiceConnect.StartDate = value to set
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.GoogleServiceConnect.EndDate">
-            <summary>
-            Get / Set accessor method for the dtEndDate private variable
-            GoogleServiceConnect.EndDate = value to set
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.GoogleServiceConnect.Login">
-            <summary>
-            Accessor method for Google Login
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.GoogleServiceConnect.Password">
-            <summary>
-            Accessor method for Google password
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.GoogleServiceConnect.Calendar">
-            <summary>
-            Accessor method for Google password
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.GoogleServiceConnect.UseSSL">
-            <summary>
-            Accessor method for UseSSl
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.GoogleServiceConnect.Notifications">
-            <summary>
-            Accessor method for Notifications
-            </summary>
-        </member>
-        <member name="P:NotesToGoogle.GoogleServiceConnect.DaysAhead">
-            <summary>
-            Accessor method for Days ahead information
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.#ctor">
-            <summary>
-            Class constructor for SyncPreferences class.
-            This class is used to save and retrieve the user preferences from file.
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.SavePreferences">
-            <summary>
-            Method used to save / write preferences to file
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.LoadPreferences">
-            <summary>
-            Method used to load / read preferences from file
-            </summary>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.SetPreference(System.String,System.String)">
-            <summary>
-            Method used to set preference values
-            </summary>
-            <param name="_prefName">Preference Name to store</param>
-            <param name="_prefValue">Preference Value to store</param>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.GetPreference(System.String)">
-            <summary>
-            Method used to retrieve preference value
-            </summary>
-            <param name="_prefName">Preference name to return value of</param>
-            <returns>String value of preference</returns>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.EncryptString(System.String,System.String)">
-            <summary>
-            Method used to Encrypt strings using the supplied pass phrase
-            </summary>
-            <param name="Message">Text message to be encrypted</param>
-            <param name="Passphrase">Pass phrase used to encrypt the message</param>
-            <returns>The encrypted string</returns>
-        </member>
-        <member name="M:NotesToGoogle.SyncPreferences.DecryptString(System.String,System.String)">
-            <summary>
-            Method used to decrypt a specified string of characters
-            </summary>
-            <param name="Message">The encrypted text message</param>
-            <param name="Passphrase">Pass phrase used to decrypt the message</param>
-            <returns>The decrypted text message</returns>
         </member>
     </members>
 </doc>

@@ -161,7 +161,6 @@ namespace NotesToGoogle
             checkBox_CustomDaysAhead.Text = m_ResourceManager.GetString("checkBox_CustomDaysAhead");
             checkBox_MinimizeToTray.Text = m_ResourceManager.GetString("checkBox_MinimizeToTray");
             checkBox_StartMinimized.Text = m_ResourceManager.GetString("checkBox_StartMinimized");
-            button_CreateService.Text = m_ResourceManager.GetString("button_CreateService");
             radioButton_English.Text = m_ResourceManager.GetString("radioButton_English");
             radioButton_French.Text = m_ResourceManager.GetString("radioButton_French");
 
@@ -342,7 +341,6 @@ namespace NotesToGoogle
             this.groupBox_Window = new System.Windows.Forms.GroupBox();
             this.checkBox_StartMinimized = new System.Windows.Forms.CheckBox();
             this.checkBox_MinimizeToTray = new System.Windows.Forms.CheckBox();
-            this.button_CreateService = new System.Windows.Forms.Button();
             this.groupBox_LotusNotes = new System.Windows.Forms.GroupBox();
             this.label_NotesLoginDesc = new System.Windows.Forms.Label();
             this.checkBox_NotesServerAuth = new System.Windows.Forms.CheckBox();
@@ -581,7 +579,7 @@ namespace NotesToGoogle
             this.groupBox_language.Controls.Add(this.radioButton_English);
             this.groupBox_language.Controls.Add(this.radioButton_French);
             this.groupBox_language.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox_language.Location = new System.Drawing.Point(14, 336);
+            this.groupBox_language.Location = new System.Drawing.Point(14, 327);
             this.groupBox_language.Name = "groupBox_language";
             this.groupBox_language.Size = new System.Drawing.Size(519, 64);
             this.groupBox_language.TabIndex = 20;
@@ -618,11 +616,10 @@ namespace NotesToGoogle
             // 
             this.groupBox_Window.Controls.Add(this.checkBox_StartMinimized);
             this.groupBox_Window.Controls.Add(this.checkBox_MinimizeToTray);
-            this.groupBox_Window.Controls.Add(this.button_CreateService);
             this.groupBox_Window.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox_Window.Location = new System.Drawing.Point(14, 233);
+            this.groupBox_Window.Location = new System.Drawing.Point(14, 241);
             this.groupBox_Window.Name = "groupBox_Window";
-            this.groupBox_Window.Size = new System.Drawing.Size(519, 94);
+            this.groupBox_Window.Size = new System.Drawing.Size(519, 74);
             this.groupBox_Window.TabIndex = 19;
             this.groupBox_Window.TabStop = false;
             this.groupBox_Window.Text = "Window";
@@ -648,16 +645,6 @@ namespace NotesToGoogle
             this.checkBox_MinimizeToTray.TabIndex = 8;
             this.checkBox_MinimizeToTray.Text = "Minimize To Tray";
             this.checkBox_MinimizeToTray.UseVisualStyleBackColor = true;
-            // 
-            // button_CreateService
-            // 
-            this.button_CreateService.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_CreateService.Location = new System.Drawing.Point(6, 59);
-            this.button_CreateService.Name = "button_CreateService";
-            this.button_CreateService.Size = new System.Drawing.Size(104, 23);
-            this.button_CreateService.TabIndex = 11;
-            this.button_CreateService.Text = "Create Service";
-            this.button_CreateService.UseVisualStyleBackColor = true;
             // 
             // groupBox_LotusNotes
             // 
@@ -727,7 +714,7 @@ namespace NotesToGoogle
             this.groupBox_GoogleCalendar.Controls.Add(this.checkBox_ConnectUsingSSL);
             this.groupBox_GoogleCalendar.Controls.Add(this.checkBox_CreateNotification);
             this.groupBox_GoogleCalendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox_GoogleCalendar.Location = new System.Drawing.Point(14, 13);
+            this.groupBox_GoogleCalendar.Location = new System.Drawing.Point(14, 20);
             this.groupBox_GoogleCalendar.Name = "groupBox_GoogleCalendar";
             this.groupBox_GoogleCalendar.Size = new System.Drawing.Size(519, 109);
             this.groupBox_GoogleCalendar.TabIndex = 17;
@@ -1038,8 +1025,8 @@ namespace NotesToGoogle
             // 
             this.backgroundWorker_SingleSync.WorkerReportsProgress = true;
             this.backgroundWorker_SingleSync.DoWork += new System.ComponentModel.DoWorkEventHandler(this.DoTheWork);
-            this.backgroundWorker_SingleSync.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.DoTheWork_Completed);
             this.backgroundWorker_SingleSync.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.DoTheWork_Progress);
+            this.backgroundWorker_SingleSync.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.DoTheWork_Completed);
             // 
             // notifyIcon_Tray
             // 
@@ -1127,8 +1114,8 @@ namespace NotesToGoogle
             this.Name = "NotesToGoogleForm";
             this.Text = "Notes To Google Calender Sync";
             this.TransparencyKey = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.Load += new System.EventHandler(this.NotesToGoogleForm_Load);
             this.Closing += new System.ComponentModel.CancelEventHandler(this.FormClosingEventCancel_Closing);
+            this.Load += new System.EventHandler(this.NotesToGoogleForm_Load);
             this.tabControl_MainControl.ResumeLayout(false);
             this.tabPage_Connect.ResumeLayout(false);
             this.groupBox_GoogleConnection.ResumeLayout(false);
@@ -1204,7 +1191,6 @@ namespace NotesToGoogle
         private Button button_ClearDebug;
         private TextBox textBox_CustomDaysAhead;
         private CheckBox checkBox_CustomDaysAhead;
-        private Button button_CreateService;
         private SyncPreferences config;
         private CheckBox checkBox_MessageBoxDebug;
         private CheckBox checkBox_CreateNotification;
@@ -1570,7 +1556,7 @@ namespace NotesToGoogle
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        [System.Diagnostics.DebuggerNonUserCodeAttribute()] 
+        ///[System.Diagnostics.DebuggerNonUserCodeAttribute()] 
         private void DoTheWork(object sender, DoWorkEventArgs e)
         {
             // Get the background worker as an object
@@ -1579,7 +1565,7 @@ namespace NotesToGoogle
             // create a temp calendar, for testing purposes
             NotesToGoogleSync sync;
             int daysAheadToCheck = (checkBox_CustomDaysAhead.Checked) ? int.Parse(textBox_CustomDaysAhead.Text) : DEFAULTDAYSAHEAD;
-            string defaultCalendar = (radioButton_MainCalChoice.Checked) ? textBox_GoogleLogin.Text : textBox_OtherCalName.Text;           
+            string defaultCalendar = (radioButton_MainCalChoice.Checked) ? radioButton_MainCalChoice.Text : textBox_OtherCalName.Text;           
 
             // Create the Google service
             GoogleServiceConnect googleService = new GoogleServiceConnect(
@@ -1598,7 +1584,7 @@ namespace NotesToGoogle
 
             // Do some checking of services and connectivity
             // If successful do the sync
-            if (googleService == null || !googleService.TestConnection())
+            if (googleService == null || !googleService.TestConnection()) 
             {
                 e.Result = NotesToGoogleSync.SYNCNULLGSERVICE;
                 throw new Exception("Google service not initialized; check login information. \r\n" + googleService.LastError);               
