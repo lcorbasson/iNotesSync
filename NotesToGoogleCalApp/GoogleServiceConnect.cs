@@ -48,26 +48,26 @@ namespace NotesToGoogle
                 // Gather initial variables
                 sGoogleLogin = _GoogleLogin;
                 sGooglePassword = _GooglePassword;
-                defaultCalendar = _GoogleLogin;
+                defaultCalendar = "Main Calendar";
                 bUseSSL = _UseSSL;
                 bNotifications = _notifications;
                 iDaysAhead = 14;
                 lasterror = "";
 
                 csService = new CalendarService("NotesToGoogleApp");
+                requestFactory = (GDataRequestFactory)csService.RequestFactory;
 
                 // Depending on the 
                 if (bUseSSL)
                 {
+                    requestFactory.UseSSL = true;
                     sHttpProtocol = "https://";
                 }
                 else
                 {
+                    requestFactory.UseSSL = false;
                     sHttpProtocol = "http://";
-                }
-
-                // Create the Calendar Service
-                
+                }               
 
                 // Set the Google Calendar Urls               
                 sOwnerCalURI = sHttpProtocol + "www.google.com/calendar/feeds/default/owncalendars/full";
@@ -80,12 +80,15 @@ namespace NotesToGoogle
 
                 // Setup any proxy information from Internet Explorer settings
                 // If this doesn't work, I'll have to add a check box for proxy usage
-                requestFactory = (GDataRequestFactory)csService.RequestFactory;
                 iProxy = WebRequest.DefaultWebProxy;
                 myProxy = new WebProxy(iProxy.GetProxy(new Uri(sOwnerCalURI)));
                 myProxy.Credentials = CredentialCache.DefaultCredentials;
-                myProxy.UseDefaultCredentials = true;
-                requestFactory.Proxy = myProxy;
+                
+                // if Proxy exists, then add it to the requestFactory, if nothing then don't add it.
+                if (myProxy.Address.AbsoluteUri.ToString() != sOwnerCalURI)
+                {
+                    requestFactory.Proxy = myProxy;
+                }
             }
             catch (ServiceUnavailableException e)
             {

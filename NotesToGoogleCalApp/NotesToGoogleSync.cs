@@ -50,7 +50,7 @@ namespace NotesToGoogle
         /// Method called to initiate the sync process.
         /// </summary>
         /// <returns>Returns the success value</returns>
-        [System.Diagnostics.DebuggerNonUserCodeAttribute()] 
+        ///[System.Diagnostics.DebuggerNonUserCodeAttribute()] 
         public int Sync(BackgroundWorker worker, DoWorkEventArgs e)
         {
             int retVal = 0;
